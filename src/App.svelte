@@ -167,20 +167,110 @@ npm install -g 9router
     },
   };
 
+  const hrefFor = (path) => `${import.meta.env.BASE_URL}${String(path).replace(/^\//, "")}`;
+
+  function routeOf(href) {
+    const url = new URL(href, location.href);
+    const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+    let path = url.pathname.replace(/\/index\.html$/, "") || "/";
+    if (basePath && path.startsWith(basePath)) path = path.slice(basePath.length) || "/";
+    if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+    return path.startsWith("/") ? path : `/${path}`;
+  }
+
   function currentPath() {
     if (location.hash.startsWith("#/")) return location.hash.slice(1);
-    const path = location.pathname.replace(/\/index\.html$/, "") || "/";
-    return path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+    return routeOf(location.href);
   }
 
   let route = $state(currentPath());
+  let homeLeaving = $state(false);
+
+  function go(href) {
+    const path = routeOf(href);
+    if (path === "/talk" || path.startsWith("/talk/")) {
+      location.assign(href);
+      return;
+    }
+    history.pushState(null, "", href);
+    route = path;
+  }
 
   function follow(event) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     const href = event.currentTarget.getAttribute("href");
-    if (!href?.startsWith("#/")) return;
+    if (!href || /^(https?:)?\/\//.test(href)) return;
     event.preventDefault();
-    history.pushState(null, "", href);
-    route = href.slice(1);
+    go(href);
+  }
+
+  function openHomeHref(href) {
+    if (!href) return;
+    go(href);
+    if (routeOf(href) === "/talk" || routeOf(href).startsWith("/talk/")) return;
+    window.setTimeout(() => {
+      homeLeaving = false;
+    }, 120);
+  }
+
+  /** @type {import("svelte/attachments").Attachment} */
+  function shineCards(node) {
+    const setPoint = (card, event) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+      card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+    };
+    const cardFrom = (event) => {
+      const card = event.target.closest("a.model-card");
+      if (!card || !node.contains(card)) return null;
+      return card;
+    };
+    const onMove = (event) => {
+      const card = cardFrom(event);
+      if (card) setPoint(card, event);
+    };
+    const onDown = (event) => {
+      if (event.button !== 0 || homeLeaving) return;
+      const card = cardFrom(event);
+      if (!card) return;
+      setPoint(card, event);
+      card.classList.remove("is-press");
+      void card.offsetWidth;
+      card.classList.add("is-press");
+    };
+    const onUp = (event) => {
+      const card = cardFrom(event) ?? node.querySelector("a.model-card.is-press");
+      if (!card) return;
+      window.setTimeout(() => card.classList.remove("is-press"), 420);
+    };
+    const onClick = (event) => {
+      const card = cardFrom(event);
+      if (!card || homeLeaving) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const href = card.getAttribute("href");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        openHomeHref(href);
+        return;
+      }
+      window.setTimeout(() => {
+        homeLeaving = true;
+        window.setTimeout(() => openHomeHref(href), 480);
+      }, 460);
+    };
+    node.addEventListener("pointermove", onMove);
+    node.addEventListener("pointerdown", onDown);
+    node.addEventListener("pointerup", onUp);
+    node.addEventListener("pointercancel", onUp);
+    node.addEventListener("click", onClick, true);
+    return () => {
+      node.removeEventListener("pointermove", onMove);
+      node.removeEventListener("pointerdown", onDown);
+      node.removeEventListener("pointerup", onUp);
+      node.removeEventListener("pointercancel", onUp);
+      node.removeEventListener("click", onClick, true);
+    };
   }
 
   const tutorialSlug = $derived(route.match(/^\/tutorials\/([^/]+)\/?$/)?.[1] ?? "");
@@ -287,10 +377,8 @@ npm install -g 9router
     const onMove = () => {
       route = currentPath();
     };
-    window.addEventListener("hashchange", onMove);
     window.addEventListener("popstate", onMove);
     return () => {
-      window.removeEventListener("hashchange", onMove);
       window.removeEventListener("popstate", onMove);
     };
   });
@@ -337,13 +425,15 @@ npm install -g 9router
 <div
   class="layout"
   class:home={page === "home"}
+  class:leaving={homeLeaving}
   class:open={selected}
   style:grid-template-columns={selected ? `minmax(0, 1fr) 6px ${sideWidth}px` : "minmax(0, 1fr)"}
 >
+  <div class="leave-veil" class:on={homeLeaving}></div>
   <main class="scroll">
     {#if page === "home"}
       <div class="sky" bind:this={skyHost}></div>
-      <article class="home" dir="rtl">
+      <article class="home" dir="rtl" {@attach shineCards}>
         <div class="logos">
           <img src="{import.meta.env.BASE_URL}parspack-logo.png" alt="پارس‌پک" />
           <img src="{import.meta.env.BASE_URL}abrha-logo.png" alt="ابرها" />
@@ -351,29 +441,69 @@ npm install -g 9router
         <h1>آیا DevOps بدون دخالت انسان هم می‌تواند کار کند؟</h1>
         <p class="kicker">پارس‌پک · ۱۹ آبان ۱۴۰۵ · ساعت ۱۹:۰۰ تا ۲۱:۰۰</p>
         <a class="model-card" href="{import.meta.env.BASE_URL}talk/index.html">
-          <strong>ارائه</strong>
-          <span>اسلایدهای جلسه</span>
+          <svg class="card-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+          </svg>
+          <span class="card-copy">
+            <strong>ارائه</strong>
+          </span>
         </a>
-        <a class="model-card" href="#/agent-docs" onclick={follow}>
-          <strong>دانش مستندات پارس‌پک</strong>
-          <span>یک فایل برای عامل هوش مصنوعی، قابل کپی</span>
+        <a class="model-card" href={hrefFor("agent-docs")}>
+          <svg class="card-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+          </svg>
+          <span class="card-copy">
+            <strong>دانش مستندات پارس‌پک</strong>
+          </span>
         </a>
-        <a class="model-card" href="#/models" onclick={follow}>
-          <strong>مدل‌های ParsPack</strong>
-          <span>{models.length} مدل از کاتالوگ AI Studio</span>
-          <span>کراول: ۹ نوامبر ۲۰۲۶، ساعت ۱۶:۴۳ به وقت ایران (۱۳:۱۳ UTC)</span>
+        <a class="model-card" href={hrefFor("models")}>
+          <svg class="card-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+          </svg>
+          <span class="card-copy">
+            <strong>مدل‌های ParsPack</strong>
+          </span>
         </a>
-        <a class="model-card" href="#/bookmarks" onclick={follow}>
-          <strong>بوکمارک ها</strong>
+        <a class="model-card" href={hrefFor("bookmarks")}>
+          <svg class="card-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+          </svg>
+          <span class="card-copy">
+            <strong>بوکمارک ها</strong>
+          </span>
         </a>
-        <a class="model-card" href="#/tutorials" onclick={follow}>
-          <strong>آموزش اتصال کلید AI Studio</strong>
-          <span>OpenCode، Grok، Claude و 9router</span>
+        <a class="model-card" href={hrefFor("tutorials")}>
+          <svg class="card-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+          </svg>
+          <span class="card-copy">
+            <strong>آموزش اتصال کلید AI Studio</strong>
+          </span>
         </a>
+        <nav class="home-links" dir="ltr" aria-label="علیرضا صدرایی راد">
+          <a href="https://sadraii.ir" target="_blank" rel="noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.356 2.171a13.26 13.26 0 0 1-4.21 6.247m0 0A13.27 13.27 0 0 1 12 15.75a13.27 13.27 0 0 1-4.146-2.748m8.292 0a13.26 13.26 0 0 0 4.21-6.247M3.157 9.753a13.26 13.26 0 0 0 4.21 6.247" />
+            </svg>
+            sadraii.ir
+          </a>
+          <a href="https://t.me/sadraiiali" target="_blank" rel="noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.75 3.862 18.62 20.14c-.236 1.04-1.51 1.447-2.42.77l-4.73-3.52-2.28 2.2c-.252.244-.62.3-.93.14l.334-4.76 8.66-7.82c.377-.34-.083-.53-.586-.19L6.09 12.67l-4.61-1.44c-1-.313-1.01-1.003.216-1.48L20.35 3.1c.83-.32 1.56.2 1.4.762Z" />
+            </svg>
+            Telegram
+          </a>
+          <a href="https://x.com/sadraiiali" target="_blank" rel="noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            sadraiiali
+          </a>
+        </nav>
       </article>
     {:else if page === "tutorials" && tutorial}
       <article class="tutorial" dir="rtl">
-        <p><a href="#/tutorials" onclick={follow}>همه آموزش‌ها</a></p>
+        <p><a href={hrefFor("tutorials")} onclick={follow}>همه آموزش‌ها</a></p>
         <h1>{tutorial.title}</h1>
         <p>{tutorial.body}</p>
         <h2>نصب</h2>
@@ -384,7 +514,7 @@ npm install -g 9router
         <p dir="ltr"><strong>{tutorial.file}</strong></p>
         <p>
           آدرس پایه <code dir="ltr">https://ai.parspack.com/v1</code> است. شناسه‌ها را از
-          <a href="#/models" onclick={follow}>فهرست مدل‌ها</a> بردارید.
+          <a href={hrefFor("models")} onclick={follow}>فهرست مدل‌ها</a> بردارید.
         </p>
         <pre dir="ltr"><code>{tutorial.code("YOUR_PARSPACK_TOKEN")}</code></pre>
         {#if tutorial.run("YOUR_PARSPACK_TOKEN")}<pre dir="ltr"><code>{tutorial.run("YOUR_PARSPACK_TOKEN")}</code></pre>{/if}
@@ -393,15 +523,15 @@ npm install -g 9router
       <article class="tutorial" dir="rtl">
         <h1>آموزش اتصال کلید AI Studio</h1>
         <p>هر ابزار صفحه خودش را دارد. کلید را خودتان به‌جای <code dir="ltr">YOUR_PARSPACK_TOKEN</code> بگذارید. آدرس پایه <code dir="ltr">https://ai.parspack.com/v1</code> است.</p>
-        <a class="model-card" href="#/tutorials/opencode" onclick={follow}><strong>OpenCode</strong><span>پیکربندی کلاینت و دو مدل</span></a>
-        <a class="model-card" href="#/tutorials/grok" onclick={follow}><strong>Grok CLI</strong><span>دستور grok و فایل config.toml</span></a>
-        <a class="model-card" href="#/tutorials/claude" onclick={follow}><strong>Claude CLI</strong><span>از راه 9router</span></a>
-        <a class="model-card" href="#/tutorials/9router" onclick={follow}><strong>9router</strong><span>کلید استودیو پشت API کلود</span></a>
-        <a class="model-card" href="#/tutorials/omniroute" onclick={follow}><strong>OmniRoute</strong><span>روتر دیگر، همان پورت ۲۰۱۲۸</span></a>
+        <a class="model-card" href={hrefFor("tutorials/opencode")} onclick={follow}><strong>OpenCode</strong><span>پیکربندی کلاینت و دو مدل</span></a>
+        <a class="model-card" href={hrefFor("tutorials/grok")} onclick={follow}><strong>Grok CLI</strong><span>دستور grok و فایل config.toml</span></a>
+        <a class="model-card" href={hrefFor("tutorials/claude")} onclick={follow}><strong>Claude CLI</strong><span>از راه 9router</span></a>
+        <a class="model-card" href={hrefFor("tutorials/9router")} onclick={follow}><strong>9router</strong><span>کلید استودیو پشت API کلود</span></a>
+        <a class="model-card" href={hrefFor("tutorials/omniroute")} onclick={follow}><strong>OmniRoute</strong><span>روتر دیگر، همان پورت ۲۰۱۲۸</span></a>
       </article>
     {:else if page === "agent-docs"}
       <article class="tutorial" dir="rtl">
-        <p><a href="#/" onclick={follow}>خانه</a></p>
+        <p><a href={hrefFor("")} onclick={follow}>خانه</a></p>
         <h1>دانش مستندات پارس‌پک</h1>
         <p>متن مقاله‌های docs.parspack.com در یک جا. برای عامل هوش مصنوعی همین متن را کپی کنید.</p>
         <button type="button" onclick={copyAgentDocs}>کپی همه</button>
@@ -412,11 +542,11 @@ npm install -g 9router
       <h1 dir="rtl">بوکمارک ها</h1>
       {#each bookmarkGroups as group}
         {#if group.title}<h2 dir="rtl">{group.title}</h2>{/if}
-        <div class="bookmarks" dir={group.dir}>
+        <div class="bookmarks" class:square={group.dir === "ltr"} dir={group.dir}>
           {#each group.items as [name, href]}
             {@const host = new URL(href).host}
             <a href={href}>
-              <img src={`https://www.google.com/s2/favicons?domain=${host}&sz=64`} alt="" width="20" height="20" />
+              <img src={`https://www.google.com/s2/favicons?domain=${host}&sz=128`} alt="" width="20" height="20" />
               <strong>{name}</strong>
               <span class="chip">{host}</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">

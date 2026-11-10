@@ -32,6 +32,31 @@ input {
   background: #09090b;
 }
 
+.leave-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.48s ease;
+}
+
+.leave-veil.on {
+  opacity: 0.78;
+  pointer-events: auto;
+}
+
+.layout.home.leaving .sky {
+  filter: brightness(0.18);
+}
+
+.layout.home.leaving .home {
+  opacity: 0;
+  transform: scale(0.985);
+  pointer-events: none;
+}
+
 .layout.home main {
   position: relative;
   z-index: 1;
@@ -44,6 +69,7 @@ input {
   z-index: 0;
   overflow: hidden;
   background: #09090b;
+  transition: filter 0.48s ease;
 }
 
 .home {
@@ -52,6 +78,9 @@ input {
   background: rgb(9 9 11 / 72%);
   padding: 1.25rem 1.4rem 1.4rem;
   border-radius: 1rem;
+  transition:
+    opacity 0.48s ease,
+    transform 0.48s ease;
 }
 
 .logos {
@@ -89,12 +118,119 @@ input {
 }
 
 .layout.home a.model-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 1rem;
+  padding: 0.8rem 1.1rem;
   background: #18181b;
   border-color: #3f3f46;
   color: #f4f4f5;
+  --mx: 50%;
+  --my: 50%;
+  transition: transform 0.18s cubic-bezier(0.22, 1.4, 0.36, 1);
 }
 
-.layout.home a.model-card span {
+.layout.home a.model-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: radial-gradient(
+    220px circle at var(--mx) var(--my),
+    #fff 0%,
+    rgb(255 255 255 / 75%) 18%,
+    rgb(212 212 216 / 25%) 42%,
+    transparent 58%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.layout.home a.model-card::after {
+  content: "";
+  position: absolute;
+  left: var(--mx);
+  top: var(--my);
+  z-index: 0;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgb(255 255 255 / 42%) 0%, rgb(255 255 255 / 8%) 42%, transparent 70%);
+  transform: scale(0);
+}
+
+.layout.home a.model-card:hover::before {
+  opacity: 1;
+}
+
+.layout.home a.model-card:active {
+  transform: scale(0.965);
+}
+
+.layout.home a.model-card:active::before {
+  opacity: 1;
+  filter: brightness(2.2);
+}
+
+.layout.home a.model-card.is-press::after {
+  animation: card-ripple 0.45s ease-out;
+}
+
+@keyframes card-ripple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(38);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout.home a.model-card {
+    transition: none;
+  }
+
+  .layout.home a.model-card:active {
+    transform: none;
+  }
+
+  .layout.home a.model-card.is-press::after {
+    animation: none;
+  }
+}
+
+.layout.home a.model-card .card-logo,
+.layout.home a.model-card .card-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.layout.home a.model-card .card-copy {
+  min-width: 0;
+}
+
+.layout.home a.model-card .card-logo {
+  width: 1.7rem;
+  height: 1.7rem;
   color: #a1a1aa;
 }
 
@@ -147,6 +283,37 @@ h1 {
   line-height: 1.45;
 }
 
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  margin-top: 0.35rem;
+  padding-top: 0.85rem;
+}
+
+.home-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #a1a1aa;
+  text-decoration: none;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.home-links a:hover {
+  color: #f4f4f5;
+}
+
+.home-links svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
 a.model-card {
   display: grid;
   gap: 0.35rem;
@@ -162,46 +329,80 @@ a.model-card {
 }
 
 .bookmarks {
-  margin: 1.5rem 0 0;
+  margin: 1rem 0 0;
   display: grid;
-  gap: 0.35rem;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.5rem;
 }
 
 .bookmarks a {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.7rem 0.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.2rem;
+  min-height: 4.6rem;
+  padding: 0.7rem 0.85rem;
   color: inherit;
   text-decoration: none;
+  border: 1px solid #3f3f46;
+  border-radius: 0.85rem;
+  background: #18181b;
 }
 
 .bookmarks img {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex: none;
-  border-radius: 4px;
+  border-radius: 999px;
 }
 
 .bookmarks strong {
   font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .bookmarks .chip {
-  color: #d4d4d8;
-  font-size: 0.65rem;
-  line-height: 1.2;
-  padding: 0.05rem 0.35rem;
-  border-radius: 999px;
-  background: #27272a;
+  color: #a1a1aa;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0;
+  background: none;
 }
 
 .bookmarks svg {
-  width: 1.05rem;
-  height: 1.05rem;
-  margin-inline-start: auto;
-  flex: none;
-  color: #a1a1aa;
+  display: none;
+}
+
+.bookmarks.square {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+}
+
+.bookmarks.square a {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 9.5rem;
+  aspect-ratio: 1;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.bookmarks.square img {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.bookmarks.square strong {
+  font-size: 0.95rem;
+}
+
+.bookmarks.square svg {
+  display: none;
 }
 
 a.model-card strong {
@@ -595,5 +796,26 @@ pre code {
 
   .meta:last-child {
     display: none;
+  }
+
+  .layout.home main {
+    max-width: none;
+    width: auto;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .layout.home .home {
+    max-width: none;
+    width: auto;
+    padding-inline: 0;
+    border-radius: 0;
+  }
+
+  .layout.home .home .logos,
+  .layout.home .home h1,
+  .layout.home .home .kicker,
+  .layout.home .home .home-links {
+    padding-inline: 1rem;
   }
 }
