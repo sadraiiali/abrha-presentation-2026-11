@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجنت و هارنس هوش مصنوعی در خدمت زیرساخت محصول</title>
+<link rel="stylesheet" href="assets/reveal/reset.css">
+<link rel="stylesheet" href="assets/reveal/reveal.css">
+<style>
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-Medium.woff2") format("woff2");font-weight:500;font-display:block}
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-ExtraBold.woff2") format("woff2");font-weight:800;font-display:block}
+:root{
+ /* palette taken from nixy.a15d.at CSS (light theme) */
+ --bg:#fff; --bg-soft:#f7f7f8; --fg:#2e2e38; --muted:#747480; --faint:#9ca3af;
+ --accent:#4a62a8; --accent-soft:#9aaccf; --line:#eeeef1; --line-soft:#e5e7eb;
+ --code-bg:#f3f4f6; --pre-bg:#f4f5f7; --pre-fg:#1f2937; --hl:#fff4b8; --hl-edge:#e8c547; --ok:#3eaf7c; --danger:#dc2626;
+ /* dark theme */
+ --d-bg:#19191a; --d-surface:#232324; --d-accent:#90aef4; --d-muted:#bdbdbd; --d-line:#393946;
+ --logo:#5277C3; --radius:8px; --shadow-lg:0 8px 28px #0f172a1f;
+ --font:"Arad",Tahoma,sans-serif; --mono:"DejaVu Sans Mono",ui-monospace,Menlo,Consolas,"Liberation Mono","Arad",monospace;
+}
+@font-face{font-family:"DejaVu Sans Mono";src:local("DejaVu Sans Mono"),url("assets/fonts/DejaVuSansMono.ttf") format("truetype");font-display:block}
+html,body{background:var(--bg)}
+.reveal.rtl .slides,.reveal.rtl .slides h1,.reveal.rtl .slides h2,.reveal.rtl .slides h3,.reveal.rtl .slides h4,.reveal.rtl .slides h5,.reveal.rtl .slides h6{font-family:var(--font)}
+.reveal{font-family:var(--font);color:var(--fg);font-size:30px;font-weight:400;line-height:1.7}
+.reveal .slides{text-align:right}
+.reveal .slides section{height:100%;padding:34px 56px;box-sizing:border-box}
+.reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:var(--font);color:var(--fg);margin:0;text-transform:none;letter-spacing:0}
+.reveal h2{font-size:50px;font-weight:800;line-height:1.35;margin-bottom:18px}
+.reveal h3{font-size:30px;font-weight:700}
+.reveal h4{font-size:24px;font-weight:700;color:var(--fg)}
+.reveal p{margin:0 0 12px}
+.kicker{display:inline-block;font-size:18px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:999px;padding:2px 16px;margin-bottom:12px}
+.lead{font-size:27px;color:var(--muted);line-height:1.75}
+.lead.small{font-size:23px;margin-bottom:10px}
+bdi.lat{unicode-bidi:isolate;direction:ltr}
+bdi.c,.reveal code,.kbd{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+bdi.c{font-size:.8em;background:var(--code-bg);border:1px solid var(--line-soft);border-radius:6px;padding:0 .3em;color:#1f2937;white-space:nowrap}
+.kbd{display:inline-block;font-size:.55em;vertical-align:middle;background:var(--bg-soft);border:1px solid var(--line-soft);border-bottom-width:3px;border-radius:8px;padding:2px 12px;color:var(--accent)}
+.reveal pre{width:100%;margin:14px 0;box-shadow:none;font-size:19px;direction:ltr;text-align:left}
+.reveal pre code{display:block;background:var(--pre-bg);color:var(--pre-fg);border:1px solid var(--line-soft);border-radius:var(--radius);padding:16px 20px;line-height:1.7;max-height:none;white-space:pre;overflow:hidden}
+.reveal pre .cm{color:var(--muted);font-family:var(--font)}
+/* lists */
+.reveal ul.list{list-style:none;margin:6px 0 0;padding:0}
+.reveal ul.list li{position:relative;padding:8px 34px 8px 0;font-size:26px;line-height:1.6;border-bottom:1px solid var(--line)}
+.reveal ul.list li:last-child{border-bottom:0}
+.reveal ul.list li::before{content:"";position:absolute;right:6px;top:22px;width:11px;height:11px;border-radius:3px;background:var(--accent);transform:rotate(45deg)}
+/* window frame for screenshots */
+figure{margin:0}
+.win{border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-lg);background:#fff}
+.win .bar{display:flex;align-items:center;gap:7px;height:30px;padding:0 12px;background:var(--bg-soft);border-bottom:1px solid var(--line);direction:ltr}
+.win .bar i{width:11px;height:11px;border-radius:50%;background:#e5e7eb}
+.win .bar i:nth-child(1){background:#f87171}.win .bar i:nth-child(2){background:#fbbf24}.win .bar i:nth-child(3){background:#3eaf7c}
+.win .bar span{margin-left:12px;font:13px var(--mono);color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:6px;padding:0 10px}
+.win img{display:block;width:100%;height:auto;margin:0}
+section.shotslide{display:flex!important;align-items:center;justify-content:center;padding:0;background:#05080d}
+section.shotslide img.shotimg{display:block;width:auto;height:680px;max-width:1200px;object-fit:contain;background:#05080d}
+.phone{width:250px;border:10px solid #232324;border-radius:34px;overflow:hidden;box-shadow:var(--shadow-lg);background:#fff}
+.phone img{display:block;width:100%;margin:0}
+.phone.sm{width:170px;border-width:7px;border-radius:24px}
+.cap2{text-align:center;font-size:20px;font-weight:700;color:var(--muted);margin-top:12px}
+/* split layout */
+section.split{display:flex!important;gap:44px;align-items:center}
+section.split .col{flex:1;min-width:0}
+section.split .col.text{flex:1.05}
+section.split .col.media{flex:1}
+section.split .col.media.narrow{flex:0 0 auto}
+section.split .col.media.rowm{display:flex;align-items:flex-end;gap:18px}
+section.split .col.media.rowm .win{flex:1}
+blockquote.q{margin:6px 0 20px;padding:18px 24px;background:var(--bg-soft);border-right:5px solid var(--accent);border-radius:var(--radius);font-size:28px;line-height:1.8;width:auto;box-shadow:none;font-style:normal;color:var(--fg)}
+.callout{margin-top:18px;padding:14px 20px;border-radius:var(--radius);background:color-mix(in srgb,var(--accent) 8%,#fff);border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);font-size:23px;line-height:1.7}
+.callout.hl{background:var(--hl);border-color:var(--hl-edge);font-weight:700;color:#5c4e1a;text-align:center}
+/* title */
+.title-slide .title-wrap{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.title-slide .logo{width:120px;height:120px;margin-bottom:10px}
+.title-slide .brand{height:52px;width:auto;margin:0 0 22px}
+.title-slide h1{font-size:64px;font-weight:800;line-height:1.25}
+.title-slide .ep{font-size:40px;font-weight:700;color:var(--accent);margin-top:8px}
+.title-slide .sub{font-size:34px;color:var(--muted);margin-top:4px}
+.pill{margin-top:26px;font-size:34px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 32px}
+.meta{margin-top:56px;display:flex;align-items:center;gap:16px;font-size:23px;color:var(--muted)}
+.meta .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-soft)}
+/* cards */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.card{background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:var(--radius);padding:14px 18px;display:flex;gap:14px;align-items:flex-start}
+.card p{margin:0;font-size:20px;line-height:1.55}
+.card h3{font-size:22px;margin-bottom:4px}
+.card .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:19px}
+/* sources */
+.srcs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+.src{border:1px solid var(--line-soft);border-radius:var(--radius);padding:18px 22px;background:#fff;box-shadow:0 1px 3px #0f172a14;display:grid;grid-template-columns:1fr auto;row-gap:4px}
+.src .sn{font-size:28px;font-weight:800;color:var(--accent)}
+.src .lic{align-self:center;font:16px var(--mono);background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:999px;padding:2px 12px;color:var(--fg)}
+.src .sd{grid-column:1/-1;grid-row:2;font-size:22px}
+.src .upd{grid-column:1/-1;font-size:18px;color:var(--muted)}
+/* trio / duo */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:22px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:16px}
+/* divider */
+section.divider{color:#fff;display:flex!important;flex-direction:column;justify-content:center;align-items:flex-start}
+section.divider h2{color:#fff;font-size:84px}
+section.divider p{color:var(--d-muted);font-size:30px}
+section.divider .logo.big{width:110px;height:110px;margin-bottom:16px}
+section.divider .srcnote{margin-top:40px;font-size:20px;color:var(--d-accent);border:1px solid var(--d-line);border-radius:999px;padding:4px 18px;background:var(--d-surface)}
+section.closing h2.cl{font-size:46px;line-height:1.45;max-width:920px}
+section.closing .links{display:flex;gap:16px;margin-top:22px}
+section.closing .links span{font:22px var(--mono);color:var(--d-accent);background:var(--d-surface);border:1px solid var(--d-line);border-radius:var(--radius);padding:6px 16px}
+section.closing .thanks{color:#fff;margin-top:44px;font-size:40px}
+/* stack */
+.stack{display:flex;flex-direction:column;gap:10px}
+.stk{display:flex;gap:16px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px}
+.stk .sl{flex:0 0 230px;font-weight:800;color:var(--accent);font-size:22px}
+.stk .sv{font-size:22px;line-height:1.6}
+section.split .callout{font-size:21px}
+/* vs */
+.vs{display:grid;grid-template-columns:1fr 60px 1fr;gap:16px;align-items:stretch;margin-top:12px}
+.box{border:1px solid var(--line-soft);border-radius:var(--radius);padding:22px 26px;background:var(--bg-soft)}
+.box h3{margin-bottom:10px}
+.box p{font-size:22px;line-height:1.65;margin:0}
+.box ul.list li{font-size:20px;padding:6px 28px 6px 0}
+.box.bad{border-top:5px solid var(--danger)} .box.bad h3{color:var(--danger)}
+.box.good{border-top:5px solid var(--ok);background:#fff;box-shadow:var(--shadow-lg)} .box.good h3{color:#2f8f63}
+.vs .arrow{display:grid;place-items:center;font-size:44px;color:var(--accent)}
+/* pipeline */
+.chips{display:flex;gap:8px;margin:4px 0 16px;flex-wrap:nowrap}
+.chip{flex:1;font-size:16px;line-height:1.4;font-weight:700;text-align:center;padding:8px 6px;border-radius:var(--radius);background:var(--bg-soft);border:1px solid var(--line-soft);color:var(--faint);position:relative}
+.chip b{display:block;font-size:20px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:16px;align-items:flex-start;border:1px solid var(--line-soft);border-radius:var(--radius);padding:12px 18px;background:#fff;box-shadow:0 1px 3px #0f172a14}
+.step .sn2{flex:0 0 38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:20px}
+.step h4{font-size:24px;margin-bottom:2px}
+.step p{font-size:20px;margin:0;color:var(--muted);line-height:1.6}
+.split2{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:start}
+.split2 .step{padding:8px 16px}.split2 .step h4{font-size:21px}.split2 .step p{font-size:18px}
+.split2 .steps{gap:8px}
+/* bignum */
+.bignum{display:flex;align-items:baseline;gap:16px;margin:0 0 8px}
+.bignum span{font-size:110px;font-weight:800;color:var(--accent);line-height:1.1}
+.bignum small{font-size:28px;color:var(--muted);font-weight:700}
+/* code flow */
+.codeflow{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+.codeflow .box p{font-size:23px}
+.mini pre{font-size:22px}
+/* two col */
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:30px;align-items:center}
+.two ul.list li{font-size:22px}
+.two pre{font-size:15.5px}
+/* rules */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px;margin-top:10px}
+.rule{display:flex;align-items:center;gap:14px;font-size:23px;padding:12px 16px;border:1px solid var(--line-soft);border-radius:var(--radius);background:var(--bg-soft);line-height:1.5}
+.rule span{flex:0 0 32px;height:32px;border-radius:8px;background:#fff;border:1px solid var(--accent-soft);color:var(--accent);font-weight:800;display:grid;place-items:center;font-size:18px}
+.rule:last-child{grid-column:1/-1}
+/* human steps */
+.hsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:26px;position:relative}
+.hstep{background:#fff;border:1px solid var(--line-soft);border-radius:12px;padding:22px 20px;box-shadow:var(--shadow-lg);min-height:190px}
+.hstep span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:22px;margin-bottom:12px}
+.hstep p{font-size:24px;line-height:1.6;margin:0;font-weight:500}
+/* features */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
+.feat{border:1px solid var(--line-soft);border-radius:var(--radius);padding:16px 18px;background:#fff;border-top:4px solid var(--accent)}
+.feat h4{margin-bottom:6px}
+.feat p{font-size:20px;line-height:1.65;margin:0;color:var(--fg)}
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px;direction:rtl}
+.tag{font-size:19px;padding:4px 14px;border-radius:999px;border:1px solid var(--line-soft);background:var(--bg-soft);font-weight:500}
+.tag[dir=ltr]{font-family:var(--mono);font-size:17px}
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.pillar{text-align:center;padding:30px 16px;border-radius:12px;background:var(--bg-soft);border:1px solid var(--line-soft);font-size:26px;font-weight:700;line-height:1.5}
+.pillar span{display:block;font-size:54px;font-weight:800;color:var(--accent);line-height:1.2;margin-bottom:6px}
+/* vertical rhythm */
+.reveal .slides>section[style*="display: block"]:not(.split):not(.title-slide){display:flex!important;flex-direction:column;justify-content:center}
+.kicker{align-self:flex-start}
+.win img{object-fit:cover;object-position:top}
+section.split .win img{max-height:540px}
+.trio .win img{height:330px}
+.duo .win img{height:400px}
+.media2 .win img{height:400px}
+.reveal .box p{font-size:26px}
+.rule{font-size:25px;padding:16px 18px}
+.hstep p{font-size:27px}.hstep{min-height:230px}
+.pillar{font-size:29px;padding:38px 16px}
+.feat p{font-size:21px}.feat h4{font-size:25px}
+.codeflow .box p{font-size:25px}
+.src .sd{font-size:24px}
+.two ul.list li{font-size:23px}
+.flow{display:flex;align-items:center;gap:10px;margin:22px 0 4px}
+.flow .fl{flex:1;text-align:center;font-size:22px;font-weight:700;padding:16px 10px;border-radius:var(--radius);border:1px solid var(--line-soft);background:#fff;box-shadow:0 1px 3px #0f172a14;line-height:1.5}
+.flow .fl.cut{border-top:4px solid var(--warn,#9c6300)}
+.flow .fl.ai{border-top:4px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,#fff)}
+.flow .fl.back{border-top:4px solid var(--ok)}
+.flow .fa{font-size:30px;color:var(--accent)}
+/* v2 additions */
+.title-slide h1.t2{font-size:96px;line-height:1.25}
+.title-slide .ep{font-size:60px;font-weight:800;color:var(--accent);line-height:1.3;margin-top:4px}
+.title-slide .sub{margin-top:18px}
+.title-slide .meta{margin-top:40px}
+.needs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:14px}
+.need{background:#fff;border:1px solid var(--line-soft);border-top:5px solid var(--accent);border-radius:12px;padding:22px 22px;box-shadow:var(--shadow-lg)}
+.need .num{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:20px;margin-bottom:10px}
+.need h3{font-size:28px;margin-bottom:8px}
+.need p{font-size:23px;line-height:1.7;margin:0}
+.srcs.one{grid-template-columns:1fr;gap:10px}
+.srcs.one .src{padding:10px 18px}
+.srcs.one .src .sn{font-size:23px}.srcs.one .src .sd{font-size:20px}.srcs.one .src .upd{font-size:16px}
+.psteps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.pstep{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line-soft);border-radius:var(--radius);padding:12px 14px;background:#fff;box-shadow:0 1px 3px #0f172a14;border-top:4px solid var(--accent)}
+.pstep .sn2{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:18px}
+.pstep h4{font-size:21px;margin-bottom:2px}
+.pstep p{font-size:17px;line-height:1.6;margin:0;color:var(--muted)}
+.pstep:nth-child(4){border-top-color:var(--ok)}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:4px 0 16px}
+.mdl{border:1px solid var(--line-soft);border-radius:var(--radius);padding:12px 18px;background:color-mix(in srgb,var(--accent) 7%,#fff)}
+.mdl bdi.lat{display:block;font-size:24px;font-weight:800;color:var(--accent);text-align:right}
+.mdl small{display:block;font-size:18px;color:var(--muted)}
+.rules .rule{font-size:21px;padding:10px 14px}
+.hsteps.two2{grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.hstep.sm{min-height:0;padding:12px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 3px #0f172a14}
+.hstep.sm span{flex:0 0 36px;width:36px;height:36px;font-size:18px;margin:0}
+.hstep.sm p{font-size:20px}
+.srcp{font-size:19px;color:var(--muted);margin-top:12px}
+section.split .callout .kbd{font-size:.8em;margin-left:6px}
+section.closing h2.cl{font-size:60px;margin-bottom:6px}
+section.closing .pillars{width:100%;margin-top:14px}
+.pillar.d{background:var(--d-surface);border-color:var(--d-line);color:#fff;font-size:24px;padding:22px 12px}
+.pillar.d span{color:var(--d-accent);font-size:40px}
+section.closing p{font-size:23px;margin:14px 0 0}
+section.closing .links{margin-top:18px}
+section.closing .thanks{margin-top:22px;font-size:34px}
+section.join{align-items:center;text-align:center}
+section.join h2{font-size:56px}
+section.join .qrwrap{display:inline-block;margin-top:18px;background:#fff;border-radius:16px;padding:12px;line-height:0}
+section.join .qrwrap img{width:280px;height:280px;object-fit:contain;margin:0}
+section.join .handle{margin-top:16px;font-size:28px;color:#fff}
+.q-sub{font-size:21px;color:var(--muted);margin:-8px 0 14px}
+.title-slide h1.t2{font-size:80px}
+.s-ai h2,.s-hu h2{font-size:42px}
+.rule>div{flex:1}
+.callout.edc{font-size:21px}
+.callout.edc .keys{display:flex;gap:18px;margin-top:8px;flex-wrap:wrap}
+.callout.edc .kbd{font-size:17px;margin-left:6px}
+.s-hu .srcp{font-size:17px}
+.pstep.cmd{justify-content:center;background:var(--pre-bg);border-top-color:var(--muted)}
+.pstep.cmd pre{margin:4px 0 0;font-size:16px}
+.pstep.cmd pre code{padding:10px 12px}
+/* reserved camera zones (slide units; bubble 168 + inset 22 => keep 230 x 230 corner free) */
+.reveal .slides>section.cam-bl[style*="display: block"],.reveal .slides>section.cam-br[style*="display: block"],.reveal .slides>section.cam-tl[style*="display: block"]{justify-content:flex-start}
+.reveal .slides>section{padding-top:40px}
+/* bottom-left group */
+.cam-bl.split .col.media{align-self:flex-start}
+.cam-bl.split .win img{max-height:400px}
+.cam-bl .phone{height:430px}.cam-bl .phone img{height:100%;object-fit:cover;object-position:top}
+.cam-bl:not(.split) .callout{margin-left:240px}
+.cam-bl .need{padding:18px 20px}.cam-bl .need p{font-size:21px}.cam-bl .need h3{font-size:26px}.cam-bl .needs{margin-top:8px}
+/* bottom-right group: media column moves to the right/top, text to the left */
+.cam-br.split{flex-direction:row-reverse}
+.cam-br.split .col.media{align-self:flex-start}
+.cam-br.split .win img{max-height:400px}
+.cam-br:not(.split) .callout{margin-right:240px}
+.cam-br .vs .box p{font-size:23px}.cam-br .vs .box{padding:18px 22px}
+.cam-br.split .col.media{flex:.85}
+.cam-br .psteps .pstep:nth-child(5){grid-column-start:2}
+.cam-br.divider{padding-bottom:240px!important;justify-content:center!important}
+/* top-left group: header keeps the left corner free, body starts below the zone */
+.cam-tl .hd{margin-left:240px;min-height:200px}
+.cam-tl.split .col.media{align-self:flex-end;padding-bottom:10px}
+.cam-tl.split .win img{max-height:400px}
+.cam-tl.split .col.text .hd{margin-left:0;min-height:0}
+.cam-tl.closing h2.cl{margin-left:240px;min-height:200px;display:flex;align-items:flex-start}
+.reveal .slide-number{left:50%!important;right:auto!important;bottom:6px!important;transform:translateX(-50%)}
+/* webcam bubble */
+#cam{position:fixed;left:24px;top:24px;width:168px;height:168px;box-sizing:border-box;transition:left .7s cubic-bezier(.2,.85,.25,1),top .7s cubic-bezier(.2,.85,.25,1),width .25s,height .25s;z-index:1000;border-radius:50%;overflow:hidden;border:3px solid #4a62a8;box-shadow:0 8px 28px #0f172a40,0 0 0 6px #4a62a81f;display:none;cursor:grab;touch-action:none;background:#19191a;user-select:none}
+#cam.live{display:block}
+#cam.drag{cursor:grabbing;transition:none}
+#cam video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;pointer-events:none}
+@media print{#cam{display:none!important}}
+html.print-pdf #cam,html.reveal-print #cam{display:none!important}
+/* shared window. Picked once at the start, then stays on every slide. */
+#share{position:fixed;z-index:1001;display:none;box-sizing:border-box;background:#19191a;border:3px solid #4a62a8;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px #0f172a40,0 0 0 6px #4a62a81f;cursor:grab;touch-action:none;user-select:none}
+#share.live{display:block}
+#share.drag{cursor:grabbing}
+#share video{width:100%;height:100%;object-fit:contain;background:#111;display:block;pointer-events:none}
+#share-btn{position:fixed;z-index:1002;top:16px;left:50%;transform:translateX(-50%);font:600 15px/1.2 Arad,Tahoma,sans-serif;color:#fff;background:#4a62a8;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;box-shadow:0 6px 18px #0f172a33}
+#share-btn[hidden]{display:none}
+@media print{#share,#share-btn{display:none!important}}
+html.print-pdf #share,html.print-pdf #share-btn,html.reveal-print #share,html.reveal-print #share-btn{display:none!important}
+/* controls / progress tinted */
+.reveal .progress{color:var(--accent);height:4px}
+.reveal .controls{color:var(--accent)}
+.reveal .slide-number{font-family:var(--font);background:transparent;color:var(--muted);font-size:16px}
+.reveal .slides section .fragment.fade-up{transform:translate(0,24px)}
+.reveal .slides section .fragment.fade-up.visible{transform:none}
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+<section class="title-slide cam-bl" data-background-color="#ffffff">
+<div class="title-wrap">
+<img class="brand" src="assets/parspack-logo.png" alt="ParsPack">
+<h1>ایجنت و هارنس هوش مصنوعی</h1>
+<div class="ep">در خدمت زیرساخت محصول</div>
+<p class="sub">راه‌اندازی گام‌به‌گام میل‌سرور دامنه <bdi class="lat">inja.at</bdi> با هدایت امن ابزارهای <bdi class="lat">DevOps</bdi></p>
+<div class="meta"><span>علیرضا صدرایی راد | پارس‌پک | ۱۹ آبان ۱۴۰۵</span></div>
+</div><aside class="notes">سلام و عصر همگی به‌خیر. خیلی خوشحالم که در این وبینار دو ساعته در خدمت شما هستم. موضوع امروز ما نه دربارهٔ وعده‌های دوردست هوش مصنوعی است و نه دربارهٔ جایگزینی کامل مهندس زیرساخت با یک مدل زبانی. می‌خواهیم روی یک سناریوی کاملاً واقعی، ملموس و قابل اجرا تمرکز کنیم: ما قصد داریم یک میل‌سرور واقعی برای دامنه inja.at راه‌اندازی کنیم. در این مسیر، از یک کلید هوش مصنوعی در سرویس AI Studio پارس‌پک استفاده می‌کنیم، آن را پشت یک روتر محلی قرار می‌دهیم و به یک ایجنت کدنویسی اجازه می‌دهیم کدهای Terraform و Ansible ما را آماده و اجرا کند. هدف ما بررسی دقیق این سازوکار است؛ اینکه هوش مصنوعی کجای این فرآیند می‌نشیند، چگونه کدهای ما را بازبینی یا تست می‌کند و از همه مهم‌تر، هارنس یا حصار امنیتی دور آن چطور جلوی خطاهای خطرناک را می‌گیرد. تا ساعت بیست‌ویک با هم خواهیم بود تا کل این چرخه را قدم‌به‌قدم تحلیل و پیاده‌سازی کنیم.</aside></section>
+<section class="cam-bl"><header class="hd"><div class="kicker">پرسش بنیادین</div><h2>آیا <bdi class="lat">DevOps</bdi> بدون دخالت انسان کار می‌کند؟</h2></header><div class="vs">
+<div class="box bad fragment fade-up"><h3>انتظار نادرست</h3><p>سپردن دسترسی مستقیم به ایجنت برای اعمال تغییرات، نابودی منابع، و اجرای کورکورانه روی سرور زنده.</p></div>
+<div class="arrow fragment fade-in">←</div>
+<div class="box good fragment fade-up"><h3>پاسخ مهندسی</h3><p>ایجنت فقط آماده‌سازی، <bdi class="c">plan</bdi> و <bdi class="c">check</bdi> <bdi class="lat">mode</bdi> را انجام می‌دهد؛ اعمال نهایی منوط به تایید انسان است.</p></div>
+</div><p class="callout hl fragment fade-up">انسان تصمیم‌گیرنده نهایی در اجرای تغییرات حساس باقی می‌ماند.</p><aside class="notes">خیلی از همکاران در زمان ثبت‌نام این سوال را مطرح کردند که آیا واقعاً می‌توان کار DevOps را کاملاً خودکار و بدون دخالت انسان پیش برد؟ پاسخ صریح و مهندسی به این پرسش یک کلمه است: خیر، و اصلاً نباید چنین هدفی داشته باشیم. اگر به یک مدل زبانی دسترسی کامل با سطح دسترسی روت بدهید و به آن اجازه دهید روی سرور تولیدی یا زیرساخت ابری دستوراتی مثل دلیت یا نابودی زیرساخت را اجرا کند، عملاً فاجعه آفریده‌اید. هوش مصنوعی احتمال خطا و رفتار غیرمنتظره دارد. اما در سمت راست تصویر، راه‌حل درست را می‌بینید: ما از هوش مصنوعی برای سرعت بخشیدن به طراحی سناریو، پیش‌نویس کدهای زیرساختی و بررسی وضعیت‌ها استفاده می‌کنیم. در سناریوی امروز برای برپایی میل‌سرور دامنه inja.at، ایجنت اجازه دارد دستور plan در Terraform و وضعیت check mode در Ansible را اجرا کند؛ اما مرحله اجرای قطعی فقط و فقط با تایید چشمی و تایید صریح یک انسان متخصص انجام می‌شود.</aside></section>
+<section class="cam-bl"><header class="hd"><div class="kicker">معماری اجرایی</div><h2>جریان داده و کنترل از مدل تا سرور ابری</h2><p class="lead small">یک زنجیره مشخص و ایزوله که در آن دسترسی‌ها لایه‌بندی شده‌اند.</p></header>
+<div class="stack"><div class="stk fragment fade-up"><div class="sl">کلید بالادست</div><div class="sv">تولید کلید در <bdi class="lat">AI</bdi> <bdi class="lat">Studio</bdi> پارس‌پک با آدرس https://<bdi class="lat">ai.parspack.com/v1</bdi></div></div><div class="stk fragment fade-up"><div class="sl">دروازه محلی</div><div class="sv">روتر محلی روی پورت <bdi class="lat">localhost</bdi>:<bdi class="lat">20128</bdi> به عنوان سپر امنیتی کلید</div></div><div class="stk fragment fade-up"><div class="sl">ایجنت هوشمند</div><div class="sv">ارتباط کلاینت با روتر محلی و تحلیل مخزن کدهای زیرساخت</div></div><div class="stk fragment fade-up"><div class="sl">زیرساخت ابری</div><div class="sv">اجرای <bdi class="lat">Terraform</bdi> برای ایجاد سرور ابری و شبکه <bdi class="lat">CDN</bdi></div></div><div class="stk fragment fade-up"><div class="sl">پیکربندی سیستم</div><div class="sv">اجرای <bdi class="lat">Ansible</bdi> جهت راه‌اندازی سرویس‌های ایمیل روی دامنه <bdi class="lat">inja.at</bdi></div></div></div><p class="callout fragment fade-up">ایجنت هرگز به کلید اصلی پارس‌پک دسترسی مستقیم ندارد.</p><aside class="notes">بیایید پیش از ورود به جزئیات، نقشهٔ راه امروز را با هم مرور کنیم. تمام ساختاری که امروز پیاده می‌کنیم در پنج لایه خلاصه می‌شود. لایهٔ اول کلید دسترسی ماست که در پنل ابری پارس‌پک و سرویس AI Studio تولید می‌شود و آدرس پایه آن مشخص است. در لایهٔ دوم، این کلید را مستقیماً به ابزارها نمی‌دهیم؛ بلکه آن را وارد یک روتر محلی می‌کنیم که روی سیستم ما بالا آمده است. لایهٔ سوم ایجنت یا دستیار کدنویسی ماست که تنها با این روتر محلی صحبت می‌کند و هیچ اطلاعی از کلید اصلی پنل ابری ندارد. در لایهٔ چهارم، ابزار Terraform با هدایت این ایجنت، سرور ابری ما و شبکه توزیع محتوا را بالا می‌آورد. در نهایت لایهٔ پنجم، پیکربندی داخلی ماشین با ابزار Ansible است تا میل‌سرور آماده دریافت ایمیل شود. این سلسله‌مراتب تضمین می‌کند امنیت سیستم در هیچ نقطه‌ای به خاطر اتوماسیون مخدوش نشود.</aside></section>
+<section class="cam-bl"><header class="hd"><div class="kicker">لایه اول</div><h2>کلید <bdi class="lat">AI</bdi> <bdi class="lat">Studio</bdi>؛ چیست و چه نیست؟</h2></header>
+<div class="cards"><div class="card fragment fade-up"><span class="num">1</span><div><h3>سازگار با استانداردهای رایج</h3><p>آدرس پایه https://<bdi class="lat">ai.parspack.com/v1</bdi> با صورت‌حساب ریالی و اتصال مستقیم.</p></div></div><div class="card fragment fade-up"><span class="num">2</span><div><h3>عدم ارتباط مستقیم ایجنت</h3><p>ایجنت کدنویسی این کلید و آدرس بالادست را به طور مستقیم فراخوانی نمی‌کند.</p></div></div><div class="card fragment fade-up"><span class="num">3</span><div><h3>جداسازی لایه دسترسی</h3><p>کلید فقط برای معرفی درگاه بالادست به نرم‌افزار روتر محلی استفاده می‌شود.</p></div></div></div><p class="callout fragment fade-up">یک کلید معتبر، بدون ریسک افشای تصادفی در پرامپت‌ها و گزارش‌های ابزارها.</p><aside class="notes">نقطه آغاز کار ما در پنل پارس‌پک و بخش AI Studio است. در اینجا یک کلید API می‌سازیم. این سرویس سازگار با پروتکل‌های شناخته‌شده است، پرداخت ریالی دارد و آدرس پایه‌اش به نشانی https://ai.parspack.com/v1 در دسترس ماست. اما نکتهٔ حیاتی این است که ما این کلید را مستقیماً داخل تنظیمات نرم‌افزار کدنویسی، متغیرهای محیطی سیستم، یا فایل‌های کانفیگ ابزارهای DevOps کپی نمی‌کنیم. چرا؟ چون اگر ابزار کمکی یا ایجنت خطا کند یا در متن گزارش خطایی رخ دهد، ممکن است کلید ما در لاگ‌ها، متن پرامپت‌ها یا خروجی ابزارها افشا شود یا در تاریخچه گیت ذخیره گردد. کلید AI Studio یکبار در روتر محلی قرار می‌گیرد و دیگر هیچ برنامه‌ای در سیستم شما نباید آن را مستقیماً ببیند. این تفکیک ساده، سنگ بنای امنیتی کل روندی است که امروز با هم پیاده خواهیم کرد.</aside></section>
+<section class="shotslide cam-bl" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-chat.png" alt="Chat · Abrha Free"></section>
+<section class="shotslide cam-bl" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-overview.png" alt="Overview"></section>
+<section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-keys.png" alt="API keys · ai.parspack.com/v1"></section>
+<section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-models.png" alt="Models"></section>
+<section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-terraform.png" alt="Terraform"></section>
+<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">لایه دوم</div><h2>انتخاب روتر محلی؛ ابزارهای هم‌رده در معماری</h2></header><div class="vs">
+<div class="box bad fragment fade-up"><h3>انتخاب ما: <bdi class="lat">9router</bdi></h3><p>گیت‌وی متن‌باز، اجرای محلی روی پورت ۲۰۱۲۸ با داشبورد مدیریتی و سازگاری کامل.</p></div>
+<div class="arrow fragment fade-in">←</div>
+<div class="box good fragment fade-up"><h3>گزینه جایگزین: <bdi class="lat">OmniRoute</bdi></h3><p>معماری محلی‌محور و سازگار، با منطق مشابه جهت اتصال کلاینت‌ها به درگاه داخلی.</p></div>
+</div><p class="callout hl fragment fade-up">هر دو ابزار یک نقش واحد دارند؛ ما در این جلسه با <bdi class="lat">9router</bdi> پیش می‌رویم.</p><aside class="notes">برای واسطه‌گری میان ایجنت و سرویس بالادست هوش مصنوعی، نیاز به یک روتر محلی داریم. دو ابزار بسیار خوب در این فضا وجود دارند که کارکرد مشابهی ارائه می‌دهند: 9router و OmniRoute. هر دو ابزار رویکرد محلی دارند، رابط سازگار فراهم می‌کنند و اجازه می‌دهند چند منبع ارائه‌دهنده را مدیریت کنید. اگر شما در محیط کاری خود از قبل ابزار OmniRoute را راه‌اندازی کرده‌اید، دقیقاً در همین جایگاه می‌نشیند و هیچ نیازی به تغییر رویکرد ندارید؛ چون همان اتصال به درگاه محلی را پوشش می‌دهد. اما برای اینکه در طول وبینار دچار پراکندگی نشویم، ما ابزار 9router را مبنا قرار می‌دهیم. این ابزار به عنوان یک سرویس محلی روی آدرس localhost و پورت ۲۰۱۲۸ اجرا می‌شود، یک داشبورد دارد و کلیدهای ورودی و خروجی را با دقت تفکیک می‌کند.</aside></section>
+<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">پیکربندی دروازه</div><h2>استقرار کلید در <bdi class="lat">9router</bdi> و ایزوله‌سازی کلاینت‌ها</h2><p class="lead small">جداسازی کلید پنل پارس‌پک از ابزارهای محلی در سه مرحله انجام می‌شود.</p></header>
+<div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>ثبت ارائه‌دهنده</h4><p>ورود به داشبورد محلی و تعریف آدرس https://<bdi class="lat">ai.parspack.com/v1</bdi> به همراه کلید اصلی.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>تعریف نام مستعار</h4><p>اختصاص یک نام مستعار برای مدل بدون نیاز به تغییر ساختار درخواست‌ها.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>تولید توکن محلی</h4><p>ساخت یک کلید اختصاصی در روتر جهت استفاده انحصاری ابزارهای کدنویسی.</p></div></div></div><p class="callout fragment fade-up">در تمام لاگ‌های شبکه، ترافیک ابزار به سمت آدرس محلی <bdi class="lat">localhost</bdi> هدایت می‌شود.</p><aside class="notes">حالا وارد پنل وب 9router روی پورت ۲۰۱۲۸ می‌شویم تا تنظیمات را انجام دهیم. در گام نخست، یک ارائه‌دهنده جدید تعریف می‌کنیم. آدرس پایه را روی نشانی سرور AI Studio پارس‌پک تنظیم کرده و کلیدی را که از پنل دریافت کردیم، در این بخش ذخیره می‌کنیم. در گام دوم، یک نام مستعار برای مدل مورد استفاده مشخص می‌کنیم تا کلاینت‌ها نیاز به درگیر شدن با اسامی بالادست نداشته باشند. در گام سوم و حیاتی‌ترین مرحله، خودِ 9router یک کلید مجازی مجزا تولید می‌کند. این همان کلیدی است که به کلاینت و ایجنت تحویل داده می‌شود. از این لحظه به بعد، ایجنت تمام درخواست‌های خود را به مقصد آدرس محلی سیستم شما یعنی localhost می‌فرستد. اگر به هر دلیلی کلیدِ درون ادیتور لو برود، تنها یک توکن محلی و نامعتبر در اینترنت افشا شده و دارایی‌های ابری شما کاملاً ایمن باقی می‌مانند.</aside></section>
+<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">لایه سوم</div><h2>تنظیم ایجنت بر بستر درگاه محلی</h2><p class="lead small">دستیار هوشمند مستقیماً روی مخزن کدهای پروژه میل‌سرور متصل می‌شود.</p></header>
+<ul class="list"><li class="fragment fade-up">آدرس‌دهی پایه روی نقطه پایانی محلی http://<bdi class="lat">localhost</bdi>:<bdi class="lat">20128/v1</bdi></li><li class="fragment fade-up">استفاده اختصاصی از کلید صادرشده توسط روتر محلی در پیکربندی کلاینت</li><li class="fragment fade-up">ارجاع به نام مستعار ثبت‌شده در پنل روتر بدون نیاز به جابه‌جایی مدل</li><li class="fragment fade-up">تمرکز بر تغییر فایل‌های زیرساختی پروژه به جای اجرای آزاد دستورات</li></ul><p class="callout hl fragment fade-up">کلاینت هیچ اطلاعی از آدرس اینترنتی یا هویت واقعی سرویس بالادست ندارد.</p><aside class="notes">اکنون نرم‌افزار ایجنت یا دستیار کدنویسی خود را باز می‌کنیم؛ همان محیطی که وظیفه دارد روی مخزن گیت ما کار کند و فایل‌ها را ویرایش نماید. در بخش تنظیمات ارتباط با مدل زبانی، آدرس سرور را دقیقاً به شکل http://localhost:20128/v1 مقداردهی می‌کنیم و کلید تولیدشده توسط 9router را به آن می‌دهیم. نام مدلی که ایجنت صدا می‌زند، همان نام مستعاری است که در داشبورد روتر تعیین کرده بودیم. مزیت این کار چیست؟ نخست اینکه تمام پرامپت‌ها و پاسخ‌ها در کنترل و گزارش‌گیری داخلی روتر قرار می‌گیرد. دوم اینکه کلاینت به هیچ شکلی دسترسی خروج از این چارچوب محلی را ندارد. ایجنت در این سناریو وظیفه دارد متناسب با نیاز ما برای میل‌سرور دامنه inja.at، کدهای Terraform و پلی‌بوک‌های Ansible را آماده کند و به شکل کنترل‌شده با ترمینال تعامل داشته باشد.</aside></section>
+<section data-live="1" class="divider cam-tl" data-background-color="#19191a">
+<h2>فاز اول: ایجاد زیرساخت با <bdi class="lat">Terraform</bdi></h2><p>تعریف منابع سرور ابری و شبکه <bdi class="lat">CDN</bdi> برای دامنه <bdi class="lat">inja.at</bdi></p><aside class="notes">تا اینجای کار، زنجیره ارتباطی امن میان ایجنت و سرویس هوش مصنوعی برقرار شد. حالا وارد فاز عملیاتی زیرساخت می‌شویم. برای داشتن یک میل‌سرور واقعی برای دامنه inja.at، ابتدا به بستر سخت‌افزاری و مسیریابی شبکه نیاز داریم. این بخش وظیفهٔ اختصاصی ابزار Terraform است. در این فاز، ایجنت باید کدهای مربوط به ایجاد سرور ابری پارس‌پک و پیکربندی شبکه توزیع محتوا را بخواند و بررسی کند. بیایید دقیقاً مشخص کنیم که هر بخش از این زیرساخت چه نقشی ایفا خواهد کرد و چطور باید مرزهای ارتباطی آن‌ها را از نظر شبکه و پروتکل مدیریت نمود.</aside></section>
+<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">مدیریت منابع ابری</div><h2>آنچه <bdi class="lat">Terraform</bdi> برای دامنه <bdi class="lat">inja.at</bdi> ایجاد می‌کند</h2></header>
+<div class="cards"><div class="card fragment fade-up"><span class="num">1</span><div><h3>سرور ابری پارس‌پک</h3><p>ماشین مجازی اختصاصی جهت میزبانی هسته اصلی سرویس‌های ایمیل و مدیریت نشست‌ها.</p></div></div><div class="card fragment fade-up"><span class="num">2</span><div><h3>شبکه توزیع محتوا</h3><p>فعال‌سازی <bdi class="lat">CDN</bdi> برای هدایت ترافیک وب، پورت‌های امن و وب‌میل دامنه <bdi class="lat">inja.at.</bdi></p></div></div><div class="card fragment fade-up"><span class="num">3</span><div><h3>تفکیک رکوردهای <bdi class="lat">DNS</bdi></h3><p>مسیریابی رکوردهای وب روی <bdi class="lat">CDN</bdi> و ارجاع رکوردهای اصلی ایمیل به سرور ابری.</p></div></div></div><p class="callout fragment fade-up">زیرساخت ابری طوری چیده شده که پروتکل‌های نامرتبط با وب وارد شبکه <bdi class="lat">CDN</bdi> نشوند.</p><aside class="notes">در فایل‌های پروژه Terraform، دو موجودیت کلیدی برای دامنه inja.at تعریف می‌شود. موجودیت اول، یک سرور ابری در دیتاسنتر پارس‌پک است که ماشین عملیاتی ما خواهد بود؛ جایی که برنامه‌های مربوط به میل‌سرور روی آن نصب می‌شوند. موجودیت دوم، سرویس CDN پارس‌پک است. دامنه inja.at علاوه بر ارسال و دریافت ایمیل، برای دسترسی وب‌میل یا وب‌سایت خود نیاز به لایه وب دارد. شبکه توزیع محتوا دقیقاً در جلوی لایه وب دامنه می‌نشیند تا امنیت و پایداری آن را تامین کند. همچنین در تنظیمات نام‌های دامنه، رکوردهای مربوط به وب‌سایت به سمت CDN می‌روند، در حالی که رکوردهای ویژه ارسال و دریافت ایمیل باید مستقیماً با سرور ابری در ارتباط باشند. تمام این جزئیات در ماژول‌های مشخص کدهای مخزن مکتوب شده‌اند.</aside></section>
+<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">جداسازی ترافیک شبکه</div><h2>مرزبندی ترافیک وب و سرویس ایمیل دامنه</h2></header><div class="vs">
+<div class="box bad fragment fade-up"><h3>ترافیک وب (<bdi class="lat">CDN</bdi>)</h3><p>هدایت درخواست‌های HTTP و وب‌میل؛ محافظت از لایه برنامه وب در برابر حملات متداول.</p></div>
+<div class="arrow fragment fade-in">←</div>
+<div class="box good fragment fade-up"><h3>ترافیک <bdi class="lat">SMTP</bdi> (مستقیم)</h3><p>ارتباط مستقیم میل‌سرور با دنیای اینترنت روی سرور ابری بدون عبور از لایه <bdi class="lat">CDN.</bdi></p></div>
+</div><p class="callout hl fragment fade-up">سرویس <bdi class="lat">CDN</bdi> به هیچ عنوان پروتکل‌های تبادل ایمیل مانند <bdi class="lat">SMTP</bdi> را پروکسی نمی‌کند.</p><aside class="notes">این اسلاید یکی از مهم‌ترین نکات فنی جلسه امروز ماست. بارها دیده‌ایم که افراد تصور می‌کنند تمام ترافیک دامنه از جمله پروتکل‌های پستی باید از پشت CDN عبور کند. این تصور کاملاً نادرست است. شبکه CDN پارس‌پک ترافیک وب یعنی درخواست‌های HTTP و سامانه‌های وب‌میل را مدیریت می‌کند و از آن‌ها محافظت می‌نماید. پروتکل SMTP که وظیفه تحویل و دریافت ایمیل‌ها را بر عهده دارد، هرگز از داخل CDN پروکسی نمی‌شود و نباید هم بشود. سرورهای ایمیل در سراسر دنیا باید مستقیماً به سرور ابری پارس‌پک که برای دامنه inja.at راه‌اندازی کرده‌ایم متصل شوند. بنابراین در رکوردهای DNS دامنه، رکورد MX به آدرس مستقیم سرور ابری اشاره دارد و CDN صرفاً محافظ بخش وب است. شفاف بودن این مرز، جلوی خطاهای پیکربندی شبکه را به طور کامل می‌گیرد.</aside></section>
+<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">چرخه اجرای <bdi class="lat">Terraform</bdi></div><h2>گام‌های امن در پیشبرد زیرساخت</h2><p class="lead small">ایجنت زیرساخت را ارزیابی می‌کند اما تصمیم نهایی را انسان می‌گیرد.</p></header>
+<div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>تولید برنامه اجرایی</h4><p>ایجنت دستور <bdi class="lat">terraform</bdi> <bdi class="c">plan</bdi> را اجرا کرده و خروجی تغییرات را تحلیل می‌کند.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>بررسی و تایید متخصص</h4><p>مهندس مسئول تغییرات پیشنهادی در منابع سرور ابری و <bdi class="lat">CDN</bdi> را بررسی می‌کند.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>اعمال قطعی تغییرات</h4><p>دستور <bdi class="c">apply</bdi> تنها پس از تایید صریح انسان به جریان می‌افتد.</p></div></div></div><p class="callout fragment fade-up">دستور <bdi class="c">destroy</bdi> در سطح هارنس مسدود شده و هرگز توسط ایجنت اجرا نمی‌شود.</p><aside class="notes">بیایید ببینیم ایجنت چطور Terraform را پیش می‌برد. در ابتدا، ایجنت فقط مجاز به اجرای دستور plan است. با این دستور، خروجی تغییرات خوانده می‌شود: آیا سرور ابری جدید به درستی تعریف شده؟ آیا تنظیمات CDN برای دامنه inja.at مطابق مستندات است؟ این خروجی به شکل شفاف به مهندس زیرساخت ارائه می‌شود. هیچ تغییری تا زمانی که شخص متخصص دکمه تایید را نزند، روی زیرساخت اعمال نمی‌شود. تایید انسانی مرحله‌ای نیست که بشود از آن چشم‌پوشی کرد. در کنار این، هارنس حفاظتی دور ایجنت تعریف شده که حتی اگر مدل تصمیم اشتباهی بگیرد و بخواهد دستور نابودی زیرساخت یعنی destroy را صادر کند، این دستور در دم ریجکت شده و اجرا نمی‌گردد. پس ما سرعت طراحی را با اطمینان مهندسی تلفیق کرده‌ایم.</aside></section>
+<section data-live="1" class="divider cam-tl" data-background-color="#19191a">
+<h2>فاز دوم: پیکربندی ماشین با <bdi class="lat">Ansible</bdi></h2><p>استقرار پشته نرم‌افزاری میل‌سرور روی سرور ابری آماده‌شده</p><aside class="notes">پس از اینکه سرور ابری پارس‌پک با موفقیت توسط Terraform ایجاد شد و شبکه CDN در جای درست خود نشست، نوبت به سیستم‌عامل و سرویس‌های داخلی ماشین می‌رسد. حالا باید به سراغ Ansible برویم. سرور ابری ما در حال حاضر یک ماشین خام است. باید سرویس‌های مربوط به ارسال و دریافت ایمیل، احراز هویت، و نگه‌داری صندوق‌های پستی روی آن پیاده‌سازی شوند. این مرحله بسیار حساس است، زیرا کوچک‌ترین اشتباه در تنظیمات سرویس‌های پستی می‌تواند منجر به باز ماندن رله و سوءاستفاده‌های هرزنامه‌ای شود. در ادامه می‌بینیم که چطور این مرحله را با انضباط حداکثری و اتکا به پلی‌بوک استاندارد جلو می‌بریم.</aside></section>
+<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">پیکربندی نرم‌افزاری</div><h2>وظایف <bdi class="lat">Ansible</bdi> بر روی سرور ابری</h2><p class="lead small">پیکربندی ساختارمند پشته ایمیل با استفاده از پلی‌بوک مشخص و مدون موجود در مخزن.</p></header>
+<ul class="list"><li class="fragment fade-up">نصب و راه‌اندازی پشته ایمیل و سرویس‌های مرتبط با استاندارد <bdi class="lat">SMTP</bdi></li><li class="fragment fade-up">تنظیم دقیق شناسه‌های دامنه <bdi class="lat">inja.at</bdi> بر روی سرویس‌های ارسال و دریافت</li><li class="fragment fade-up">ایجاد حساب‌های کاربری داخلی و تنظیمات مربوط به تحویل نامه‌ها</li><li class="fragment fade-up">اجرای انحصاری پلی‌بوک مشخص بدون اجرای دستورات خط فرمانی دلبخواه</li></ul><p class="callout hl fragment fade-up">ایجنت اجازه تولید یا اجرای شل‌اسکریپت بدون ساختار بر روی سرور را ندارد.</p><aside class="notes">وقتی سرور ابری در دسترس قرار گرفت، کلاینت ابزار Ansible را فراخوانی می‌کند. هدف در اینجا کاملاً مشخص است: نصب پشته کامل میل‌سرور، پیکربندی سرویس SMTP، تنظیم نام دامنه inja.at و تعریف ساختار تحویل نامه‌ها. نکته حیاتی این است که ایجنت حق ندارد یک سری دستورات خط فرمانی شل تصادفی یا نامطمئن تولید کرده و روی سرور اجرا کند. ما در مخزن گیت خود از پیش یک پلی‌بوک منظم، استاندارد و تست‌شده برای استقرار این پشته داریم. ایجنت وظیفه دارد متغیرهای مربوط به سرور جدید را در اینترنتی که ساخته شده تنظیم کند و پلی‌بوک رسمی را فرا بخواند. این رویکرد، پایداری محیط را حفظ کرده و اجازه نمی‌دهد سیستم به وضعیت‌های تعریف‌نشده و غیرقابل‌پیش‌بینی وارد شود.</aside></section>
+<section data-live="1" class="cam-bl"><header class="hd"><div class="kicker">اعتبارسنجی عملیاتی</div><h2>فرآیند اجرای پلی‌بوک میل‌سرور</h2><p class="lead small">پیکربندی ماشین در دو فاز آزمایشی و قطعی تحت نظارت انسان انجام می‌گیرد.</p></header>
+<div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>اجرای حالت سنجش</h4><p>اجرای <bdi class="lat">Ansible</bdi> در وضعیت <bdi class="c">check</bdi> <bdi class="lat">mode</bdi> بدون ایجاد هیچ‌گونه تغییر واقعی در سرور.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>ارزیابی خروجی تفاوت‌ها</h4><p>مشاهده تغییرات احتمالی پکیج‌ها و فایل‌های پیکربندی توسط مهندس مسئول.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>اعمال رسمی پیکربندی</h4><p>اجرای واقعی پلی‌بوک پس از اخذ تاییدیه انسانی و بررسی مجدد صحت اتصالات.</p></div></div></div><p class="callout fragment fade-up">وضعیت <bdi class="c">check</bdi> <bdi class="lat">mode</bdi> ریسک دستکاری ناخواسته در تنظیمات شبکه سرور را به صفر می‌رساند.</p><aside class="notes">برای اجرای Ansible هم دقیقاً همان فلسفهٔ دومرحله‌ای را دنبال می‌کنیم. ابتدا ایجنت دستور را با فلگ وضعیت آزمایشی یا همان check mode اجرا می‌کند. در این حالت، Ansible سرور ابری را بررسی می‌کند و گزارش می‌دهد که چه بسته‌هایی نصب خواهند شد، چه فایل‌هایی دستخوش تغییر می‌شوند و کدام سرویس‌ها بازنشانی خواهند گشت، بدون اینکه در عمل تغییری روی سرور رخ دهد. ما این گزارش را دقیق می‌خوانیم. آیا تنظیمات دامنه inja.at درست است؟ آیا پورت‌های غیراستاندارد باز نشده‌اند؟ وقتی مهندس این خروجی را بررسی و تایید کرد، اجرای نهایی پلی‌بوک با تایید مستقیم انسان صورت می‌پذیرد. این روش مانع از بروز هرگونه ناهماهنگی در وضعیت سرور عملیاتی ما می‌شود و شفافیت کامل به همراه دارد.</aside></section>
+<section data-live="1" class="cam-bl"><header class="hd"><div class="kicker">حصار امنیتی</div><h2>آنچه هارنس به طور خودکار مسدود می‌کند</h2></header>
+<div class="cards"><div class="card fragment fade-up"><span class="num">1</span><div><h3>ممنوعیت اجرای <bdi class="c">destroy</bdi></h3><p>حذف کامل قابلیت صدور دستورات تخریب زیرساخت در لایه ابزارها.</p></div></div><div class="card fragment fade-up"><span class="num">2</span><div><h3>حفاظت از کلیدها و <bdi class="lat">state</bdi></h3><p>جلوگیری از وارد شدن توکن پنل و فایل وضعیت <bdi class="lat">Terraform</bdi> در متن پرامپت‌ها.</p></div></div><div class="card fragment fade-up"><span class="num">3</span><div><h3>کنترل درگاه‌های شبکه</h3><p>رد درخواست باز کردن پورت‌ها فراتر از استانداردهای تحویل و دریافت پستی.</p></div></div></div><p class="callout fragment fade-up">مرزهای غیرقابل عبور باعث می‌شوند ایجنت فقط در محدوده امن تعریف‌شده کار کند.</p><aside class="notes">بیایید درباره هارنس یا همان حفاظ امنیتی صحبت کنیم که دور این ایجنت کشیده‌ایم. هارنس یک نرم‌افزار عجیب‌وغریب نیست؛ بلکه مجموعه‌ای از قوانین سفت‌وسخت در اجرای ابزارهاست. اولاً، کلمات کلیدی مخرب مثل destroy برای Terraform کلاً مسدود شده‌اند و سیستم دسترسی اجرای آن‌ها را ندارد. ثانیاً، داده‌های محرمانه مانند فایل‌های محلی وضعیت زیرساخت، توکن‌های پنل پارس‌پک و کلیدهای اصلی هرگز اجازه ورود به محتوای پرامپت ارسالی به مدل را ندارند و توسط فیلترها حذف می‌شوند. ثالثاً، اگر ایجنت به هر دلیلی تلاش کند فایروال را طوری تغییر دهد که پورت‌هایی فراتر از استانداردهای رایج ایمیل باز شوند، هارنس مداخله کرده و مانع اعمال کانفیگ می‌گردد. همچنین چاپ کردن مقادیر رمزها در خروجی کنسول به طور مطلق مسدود است. این یعنی یک محیط ایزوله و حرفه‌ای.</aside></section>
+<section class="divider closing cam-bl" data-background-color="#19191a">
+<h2 class="cl">مسیر پیاده‌سازی برای هفته آینده</h2><div class="pillars"><div class="pillar d fragment zoom-in"><span>1</span>دریافت کلید از <bdi class="lat">AI</bdi> <bdi class="lat">Studio</bdi> و استقرار آن درون روتر محلی روی پورت ۲۰۱۲۸</div><div class="pillar d fragment zoom-in"><span>2</span>طراحی کد <bdi class="lat">Terraform</bdi> برای سرور ابری و <bdi class="lat">CDN</bdi> با چرخه تایید انسانی</div><div class="pillar d fragment zoom-in"><span>3</span>اجرای پلی‌بوک <bdi class="lat">Ansible</bdi> در حالت سنجش و سپس استقرار کامل میل‌سرور</div></div>
+<p class="fragment fade-up">اتوماسیون زیرساخت با هوش مصنوعی یک دستیار سریع است، نه یک مدیر خودمختار بدون نظارت.</p>
+<h3 class="thanks">سپاس از همراهی شما | علیرضا صدرایی راد | پارس‌پک</h3><aside class="notes">به پایان این وبینار دو ساعته رسیدیم. اگر بخواهید هفته آینده همین سناریو را برای دامنه محصول خودتان پیاده کنید، سه گام اساسی پیش روی شماست. گام اول: کلید خود را در AI Studio پارس‌پک بسازید، آن را درون روتر محلی مثل 9router یا OmniRoute قرار دهید و ابزار ادیتور خود را به نقطه محلی متصل کنید. گام دوم: کدهای Terraform را برای سرور ابری و CDN بنویسید؛ اجرای plan را به ایجنت بسپارید اما دکمه تایید نهایی را خودتان بزنید. گام سوم: با اجرای پلی‌بوک Ansible ابتدا در حالت check mode و سپس اجرای واقعی، پشته ایمیل خود را بدون ریسک راه‌اندازی کنید. به یاد داشته باشیم که ارزش هوش مصنوعی در شتاب بخشیدن به توانایی‌های مهندسی ماست، مشروط بر اینکه حصار امنیتی دور آن هرگز نادیده گرفته نشود. از همراهی ارزشمند پارس‌پک و تک‌تک شما سپاسگزارم.</aside></section>
+<section class="divider join cam-bl" data-background-color="#19191a">
+<h2>گروه رویداد ابرها</h2>
+<p>لینک‌ها و بقیهٔ مطالب جلسه اینجاست</p>
+<a class="qrwrap" href="https://t.me/abrhameetup"><img src="assets/abrha-meetup-qr.png" alt="کد عضویت در گروه تلگرام @ABRHAMEETUP"></a>
+<p class="handle"><bdi class="lat">@ABRHAMEETUP</bdi></p>
+<aside class="notes">در پایان، این کد را نشان دهید تا مخاطبان به گروه تلگرام رویداد ابرها بپیوندند. لینک‌ها و بقیهٔ مطالب جلسه آنجا قرار دارد. نشانی گروه @ABRHAMEETUP است.</aside>
+</section>
+</div></div>
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script>
+const params=new URLSearchParams(location.search);
+Reveal.initialize({
+  width:1280,height:720,margin:0.03,
+  rtl:true,center:false,controlsLayout:'edges',hash:true,slideNumber:'c/t',
+  transition:'fade',transitionSpeed:'default',backgroundTransition:'fade',
+  autoAnimateDuration:0.8,autoAnimateEasing:'cubic-bezier(.2,.85,.25,1)',
+  showNotes:params.has('shownotes'),pdfSeparateFragments:false,
+  plugins:[RevealNotes]
+});
+</script>
+<script>
+/* Webcam bubble. Default corner changes every 5 slides: 1-5 bottom-left, 6-10 bottom-right, 11-15 top-left.
+   Size and inset are in slide units, so it always fits the reserved zone. C = on/off, drag = temporary move,
+   wheel or +/- = resize. Fails silently (no camera / denied). Not shown in speaker view or print. */
+(function(){
+  var qs=new URLSearchParams(location.search);
+  var embedded=false; try{embedded=window.self!==window.top}catch(e){embedded=true}
+  if(embedded||qs.has('receiver')||qs.has('print-pdf')||qs.has('nocam')||!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia))return;
+  var KEY='nixy-cam2', st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var BASE=168, INSET=22, CORNERS=['bl','br','tl'];
+  var factor=st.factor||1, wanted=st.on!==false, stream=null, override=null, group=-1;
+  var el=document.createElement('div'); el.id='cam'; el.setAttribute('aria-hidden','true');
+  var v=document.createElement('video'); v.muted=true; v.autoplay=true; v.setAttribute('playsinline',''); el.appendChild(v); document.body.appendChild(el);
+  function save(){st.factor=factor;st.on=wanted;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+  function geo(){var s=document.querySelector('.reveal .slides');var r=s.getBoundingClientRect();var sc=(window.Reveal&&Reveal.getScale)?Reveal.getScale():1;
+    return {left:r.left+(r.width-1280*sc)/2, top:r.top+(r.height-720*sc)/2, sc:sc}}
+  function place(){
+    var g=geo(), size=Math.round(BASE*g.sc*factor), ins=INSET*g.sc, c=el.dataset.corner||'bl', x, y;
+    if(override){x=override.x;y=override.y}else{
+      x=c==='br'?g.left+1280*g.sc-ins-size:g.left+ins;
+      y=c==='tl'?g.top+ins:g.top+720*g.sc-ins-size;}
+    x=Math.max(0,Math.min(innerWidth-size,x));y=Math.max(0,Math.min(innerHeight-size,y));
+    el.style.width=el.style.height=size+'px';el.style.left=x+'px';el.style.top=y+'px';}
+  function onSlide(){var h=(window.Reveal&&Reveal.getIndices)?Reveal.getIndices().h:0;var g=Math.min(CORNERS.length-1,Math.floor(h/5));
+    if(g!==group){group=g;override=null;el.dataset.corner=CORNERS[g];place()}}
+  function start(){navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:640},facingMode:'user'},audio:false}).then(function(s){stream=s;v.srcObject=s;var p=v.play();if(p&&p.catch)p.catch(function(){});el.classList.add('live');place()}).catch(function(){el.classList.remove('live')})}
+  function stop(){if(stream)stream.getTracks().forEach(function(t){t.stop()});stream=null;v.srcObject=null;el.classList.remove('live')}
+  function toggle(){wanted=!wanted;save();wanted?start():stop()}
+  function resize(d){factor=Math.max(0.6,Math.min(2.6,+(factor+d).toFixed(2)));save();place()}
+  var drag=null;
+  el.addEventListener('pointerdown',function(e){var r=el.getBoundingClientRect();drag={dx:e.clientX-r.left,dy:e.clientY-r.top};el.setPointerCapture(e.pointerId);el.classList.add('drag');e.preventDefault();e.stopPropagation()});
+  el.addEventListener('pointermove',function(e){if(!drag)return;override={x:e.clientX-drag.dx,y:e.clientY-drag.dy};place()});
+  el.addEventListener('pointerup',function(){drag=null;el.classList.remove('drag')});
+  el.addEventListener('wheel',function(e){e.preventDefault();e.stopPropagation();resize(e.deltaY<0?0.1:-0.1)},{passive:false});
+  document.addEventListener('keydown',function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;var k=e.key;
+    if(k==='c'||k==='C'||k==='ص'){toggle();e.stopImmediatePropagation();e.preventDefault()}
+    else if(k==='+'||k==='='){resize(0.12);e.stopImmediatePropagation()}
+    else if(k==='-'||k==='_'){resize(-0.12);e.stopImmediatePropagation()}},true);
+  function init(){Reveal.on('slidechanged',onSlide);Reveal.on('resize',function(){override=null;place()});addEventListener('resize',function(){setTimeout(place,50)});onSlide();if(wanted)start()}
+  if(window.Reveal&&Reveal.isReady&&Reveal.isReady())init();else if(window.Reveal)Reveal.on('ready',init);
+})();
+</script>
+<script>
+/* Window share. The picker opens with the deck, same moment as the camera.
+   The picture stays captured, and is shown only on slides marked data-live
+   (the router, Terraform, and Ansible part). G (or گ) picks again.
+   Drag moves it. Wheel over it resizes it. Hidden in speaker view and print. */
+(function(){
+  var qs=new URLSearchParams(location.search);
+  var embedded=false; try{embedded=window.self!==window.top}catch(e){embedded=true}
+  if(embedded||qs.has('receiver')||qs.has('print-pdf')||qs.has('noshare')||!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia))return;
+  var KEY='talk-share1', st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var factor=st.factor||1, stream=null, asked=false;
+  var el=document.createElement('div'); el.id='share'; el.setAttribute('aria-label','shared window');
+  var v=document.createElement('video'); v.muted=true; v.autoplay=true; v.setAttribute('playsinline',''); el.appendChild(v);
+  var btn=document.createElement('button'); btn.id='share-btn'; btn.type='button'; btn.textContent='Share window'; btn.hidden=true;
+  document.body.appendChild(el); document.body.appendChild(btn);
+  function save(){st.factor=factor; try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+  function onLiveSlide(){
+    var h=(window.Reveal&&Reveal.getIndices)?Reveal.getIndices().h:0;
+    var sec=document.querySelectorAll('.reveal .slides > section')[h];
+    return !!(sec&&sec.hasAttribute('data-live'));
+  }
+  function paint(){
+    el.classList.toggle('live', !!(stream&&onLiveSlide()));
+    if(stream)place();
+  }
+  function place(){
+    var sc=(window.Reveal&&Reveal.getScale)?Reveal.getScale():1;
+    var w=Math.round(720*sc*factor), h=Math.round(460*sc*factor);
+    var s=document.querySelector('.reveal .slides'); var r=s.getBoundingClientRect();
+    var x=r.left+(r.width-w)/2, y=r.top+(r.height-h)/2;
+    if(st.x!=null){x=st.x; y=st.y}
+    x=Math.max(0,Math.min(innerWidth-w,x)); y=Math.max(0,Math.min(innerHeight-h,y));
+    el.style.width=w+'px'; el.style.height=h+'px'; el.style.left=x+'px'; el.style.top=y+'px';
+  }
+  function stop(){
+    if(stream)stream.getTracks().forEach(function(t){t.stop()});
+    stream=null; v.srcObject=null; el.classList.remove('live'); btn.hidden=false;
+  }
+  function start(){
+    if(stream||asked)return;
+    asked=true;
+    var opts={video:{displaySurface:'window',width:{ideal:1600},height:{ideal:1000}},audio:false};
+    navigator.mediaDevices.getDisplayMedia(opts).then(function(s){
+      stream=s; v.srcObject=s; var p=v.play(); if(p&&p.catch)p.catch(function(){});
+      btn.hidden=true; paint();
+      var track=s.getVideoTracks()[0];
+      if(track)track.addEventListener('ended',function(){asked=false; stop()});
+    }).catch(function(){asked=false; btn.hidden=false});
+  }
+  btn.addEventListener('click',function(e){e.stopPropagation(); start()});
+  var drag=null;
+  el.addEventListener('pointerdown',function(e){var r=el.getBoundingClientRect();drag={dx:e.clientX-r.left,dy:e.clientY-r.top};el.setPointerCapture(e.pointerId);el.classList.add('drag');e.preventDefault();e.stopPropagation()});
+  el.addEventListener('pointermove',function(e){if(!drag)return;st.x=e.clientX-drag.dx;st.y=e.clientY-drag.dy;place()});
+  el.addEventListener('pointerup',function(){drag=null;el.classList.remove('drag');save()});
+  el.addEventListener('wheel',function(e){e.preventDefault();e.stopPropagation();factor=Math.max(0.45,Math.min(2.2,+(factor+(e.deltaY<0?0.08:-0.08)).toFixed(2)));save();place()},{passive:false});
+  document.addEventListener('keydown',function(e){
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    var k=e.key;
+    if(k==='g'||k==='G'||k==='گ'){e.preventDefault();e.stopImmediatePropagation(); if(stream){asked=false; stop()} else start()}
+  },true);
+  function init(){
+    Reveal.on('slidechanged',paint);
+    Reveal.on('resize',place);
+    addEventListener('resize',function(){setTimeout(place,50)});
+    start();
+  }
+  if(window.Reveal&&Reveal.isReady&&Reveal.isReady())init();else if(window.Reveal)Reveal.on('ready',init);
+})();
+</script>
+</body>
+</html>
