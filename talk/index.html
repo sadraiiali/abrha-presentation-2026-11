@@ -278,15 +278,6 @@ section.join .handle{margin-top:16px;font-size:28px;color:#fff}
 #cam video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;pointer-events:none}
 @media print{#cam{display:none!important}}
 html.print-pdf #cam,html.reveal-print #cam{display:none!important}
-/* shared window. Picked once at the start, then stays on every slide. */
-#share{position:fixed;z-index:1001;display:none;box-sizing:border-box;background:#19191a;border:3px solid #4a62a8;border-radius:12px;overflow:hidden;box-shadow:0 8px 28px #0f172a40,0 0 0 6px #4a62a81f;cursor:grab;touch-action:none;user-select:none}
-#share.live{display:block}
-#share.drag{cursor:grabbing}
-#share video{width:100%;height:100%;object-fit:contain;background:#111;display:block;pointer-events:none}
-#share-btn{position:fixed;z-index:1002;top:16px;left:50%;transform:translateX(-50%);font:600 15px/1.2 Arad,Tahoma,sans-serif;color:#fff;background:#4a62a8;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;box-shadow:0 6px 18px #0f172a33}
-#share-btn[hidden]{display:none}
-@media print{#share,#share-btn{display:none!important}}
-html.print-pdf #share,html.print-pdf #share-btn,html.reveal-print #share,html.reveal-print #share-btn{display:none!important}
 /* controls / progress tinted */
 .reveal .progress{color:var(--accent);height:4px}
 .reveal .controls{color:var(--accent)}
@@ -319,38 +310,34 @@ html.print-pdf #share,html.print-pdf #share-btn,html.reveal-print #share,html.re
 <section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-keys.png" alt="API keys · ai.parspack.com/v1"></section>
 <section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-models.png" alt="Models"></section>
 <section class="shotslide cam-br" data-background-color="#05080d"><img class="shotimg" src="assets/shots/aistudio-terraform.png" alt="Terraform"></section>
-<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">لایه دوم</div><h2>انتخاب روتر محلی؛ ابزارهای هم‌رده در معماری</h2></header><div class="vs">
+<section class="cam-br"><header class="hd"><div class="kicker">لایه دوم</div><h2>انتخاب روتر محلی؛ ابزارهای هم‌رده در معماری</h2></header><div class="vs">
 <div class="box bad fragment fade-up"><h3>انتخاب ما: <bdi class="lat">9router</bdi></h3><p>گیت‌وی متن‌باز، اجرای محلی روی پورت ۲۰۱۲۸ با داشبورد مدیریتی و سازگاری کامل.</p></div>
 <div class="arrow fragment fade-in">←</div>
 <div class="box good fragment fade-up"><h3>گزینه جایگزین: <bdi class="lat">OmniRoute</bdi></h3><p>معماری محلی‌محور و سازگار، با منطق مشابه جهت اتصال کلاینت‌ها به درگاه داخلی.</p></div>
 </div><p class="callout hl fragment fade-up">هر دو ابزار یک نقش واحد دارند؛ ما در این جلسه با <bdi class="lat">9router</bdi> پیش می‌رویم.</p><aside class="notes">برای واسطه‌گری میان ایجنت و سرویس بالادست هوش مصنوعی، نیاز به یک روتر محلی داریم. دو ابزار بسیار خوب در این فضا وجود دارند که کارکرد مشابهی ارائه می‌دهند: 9router و OmniRoute. هر دو ابزار رویکرد محلی دارند، رابط سازگار فراهم می‌کنند و اجازه می‌دهند چند منبع ارائه‌دهنده را مدیریت کنید. اگر شما در محیط کاری خود از قبل ابزار OmniRoute را راه‌اندازی کرده‌اید، دقیقاً در همین جایگاه می‌نشیند و هیچ نیازی به تغییر رویکرد ندارید؛ چون همان اتصال به درگاه محلی را پوشش می‌دهد. اما برای اینکه در طول وبینار دچار پراکندگی نشویم، ما ابزار 9router را مبنا قرار می‌دهیم. این ابزار به عنوان یک سرویس محلی روی آدرس localhost و پورت ۲۰۱۲۸ اجرا می‌شود، یک داشبورد دارد و کلیدهای ورودی و خروجی را با دقت تفکیک می‌کند.</aside></section>
-<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">پیکربندی دروازه</div><h2>استقرار کلید در <bdi class="lat">9router</bdi> و ایزوله‌سازی کلاینت‌ها</h2><p class="lead small">جداسازی کلید پنل پارس‌پک از ابزارهای محلی در سه مرحله انجام می‌شود.</p></header>
+<section class="cam-br"><header class="hd"><div class="kicker">پیکربندی دروازه</div><h2>استقرار کلید در <bdi class="lat">9router</bdi> و ایزوله‌سازی کلاینت‌ها</h2><p class="lead small">جداسازی کلید پنل پارس‌پک از ابزارهای محلی در سه مرحله انجام می‌شود.</p></header>
 <div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>ثبت ارائه‌دهنده</h4><p>ورود به داشبورد محلی و تعریف آدرس https://<bdi class="lat">ai.parspack.com/v1</bdi> به همراه کلید اصلی.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>تعریف نام مستعار</h4><p>اختصاص یک نام مستعار برای مدل بدون نیاز به تغییر ساختار درخواست‌ها.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>تولید توکن محلی</h4><p>ساخت یک کلید اختصاصی در روتر جهت استفاده انحصاری ابزارهای کدنویسی.</p></div></div></div><p class="callout fragment fade-up">در تمام لاگ‌های شبکه، ترافیک ابزار به سمت آدرس محلی <bdi class="lat">localhost</bdi> هدایت می‌شود.</p><aside class="notes">حالا وارد پنل وب 9router روی پورت ۲۰۱۲۸ می‌شویم تا تنظیمات را انجام دهیم. در گام نخست، یک ارائه‌دهنده جدید تعریف می‌کنیم. آدرس پایه را روی نشانی سرور AI Studio پارس‌پک تنظیم کرده و کلیدی را که از پنل دریافت کردیم، در این بخش ذخیره می‌کنیم. در گام دوم، یک نام مستعار برای مدل مورد استفاده مشخص می‌کنیم تا کلاینت‌ها نیاز به درگیر شدن با اسامی بالادست نداشته باشند. در گام سوم و حیاتی‌ترین مرحله، خودِ 9router یک کلید مجازی مجزا تولید می‌کند. این همان کلیدی است که به کلاینت و ایجنت تحویل داده می‌شود. از این لحظه به بعد، ایجنت تمام درخواست‌های خود را به مقصد آدرس محلی سیستم شما یعنی localhost می‌فرستد. اگر به هر دلیلی کلیدِ درون ادیتور لو برود، تنها یک توکن محلی و نامعتبر در اینترنت افشا شده و دارایی‌های ابری شما کاملاً ایمن باقی می‌مانند.</aside></section>
-<section data-live="1" class="cam-br"><header class="hd"><div class="kicker">لایه سوم</div><h2>تنظیم ایجنت بر بستر درگاه محلی</h2><p class="lead small">دستیار هوشمند مستقیماً روی مخزن کدهای پروژه میل‌سرور متصل می‌شود.</p></header>
+<section class="cam-br"><header class="hd"><div class="kicker">لایه سوم</div><h2>تنظیم ایجنت بر بستر درگاه محلی</h2><p class="lead small">دستیار هوشمند مستقیماً روی مخزن کدهای پروژه میل‌سرور متصل می‌شود.</p></header>
 <ul class="list"><li class="fragment fade-up">آدرس‌دهی پایه روی نقطه پایانی محلی http://<bdi class="lat">localhost</bdi>:<bdi class="lat">20128/v1</bdi></li><li class="fragment fade-up">استفاده اختصاصی از کلید صادرشده توسط روتر محلی در پیکربندی کلاینت</li><li class="fragment fade-up">ارجاع به نام مستعار ثبت‌شده در پنل روتر بدون نیاز به جابه‌جایی مدل</li><li class="fragment fade-up">تمرکز بر تغییر فایل‌های زیرساختی پروژه به جای اجرای آزاد دستورات</li></ul><p class="callout hl fragment fade-up">کلاینت هیچ اطلاعی از آدرس اینترنتی یا هویت واقعی سرویس بالادست ندارد.</p><aside class="notes">اکنون نرم‌افزار ایجنت یا دستیار کدنویسی خود را باز می‌کنیم؛ همان محیطی که وظیفه دارد روی مخزن گیت ما کار کند و فایل‌ها را ویرایش نماید. در بخش تنظیمات ارتباط با مدل زبانی، آدرس سرور را دقیقاً به شکل http://localhost:20128/v1 مقداردهی می‌کنیم و کلید تولیدشده توسط 9router را به آن می‌دهیم. نام مدلی که ایجنت صدا می‌زند، همان نام مستعاری است که در داشبورد روتر تعیین کرده بودیم. مزیت این کار چیست؟ نخست اینکه تمام پرامپت‌ها و پاسخ‌ها در کنترل و گزارش‌گیری داخلی روتر قرار می‌گیرد. دوم اینکه کلاینت به هیچ شکلی دسترسی خروج از این چارچوب محلی را ندارد. ایجنت در این سناریو وظیفه دارد متناسب با نیاز ما برای میل‌سرور دامنه inja.at، کدهای Terraform و پلی‌بوک‌های Ansible را آماده کند و به شکل کنترل‌شده با ترمینال تعامل داشته باشد.</aside></section>
-<section data-live="1" class="divider cam-tl" data-background-color="#19191a">
+<section class="divider cam-tl" data-background-color="#19191a">
 <h2>فاز اول: ایجاد زیرساخت با <bdi class="lat">Terraform</bdi></h2><p>تعریف منابع سرور ابری و شبکه <bdi class="lat">CDN</bdi> برای دامنه <bdi class="lat">inja.at</bdi></p><aside class="notes">تا اینجای کار، زنجیره ارتباطی امن میان ایجنت و سرویس هوش مصنوعی برقرار شد. حالا وارد فاز عملیاتی زیرساخت می‌شویم. برای داشتن یک میل‌سرور واقعی برای دامنه inja.at، ابتدا به بستر سخت‌افزاری و مسیریابی شبکه نیاز داریم. این بخش وظیفهٔ اختصاصی ابزار Terraform است. در این فاز، ایجنت باید کدهای مربوط به ایجاد سرور ابری پارس‌پک و پیکربندی شبکه توزیع محتوا را بخواند و بررسی کند. بیایید دقیقاً مشخص کنیم که هر بخش از این زیرساخت چه نقشی ایفا خواهد کرد و چطور باید مرزهای ارتباطی آن‌ها را از نظر شبکه و پروتکل مدیریت نمود.</aside></section>
-<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">مدیریت منابع ابری</div><h2>آنچه <bdi class="lat">Terraform</bdi> برای دامنه <bdi class="lat">inja.at</bdi> ایجاد می‌کند</h2></header>
+<section class="cam-tl"><header class="hd"><div class="kicker">مدیریت منابع ابری</div><h2>آنچه <bdi class="lat">Terraform</bdi> برای دامنه <bdi class="lat">inja.at</bdi> ایجاد می‌کند</h2></header>
 <div class="cards"><div class="card fragment fade-up"><span class="num">1</span><div><h3>سرور ابری پارس‌پک</h3><p>ماشین مجازی اختصاصی جهت میزبانی هسته اصلی سرویس‌های ایمیل و مدیریت نشست‌ها.</p></div></div><div class="card fragment fade-up"><span class="num">2</span><div><h3>شبکه توزیع محتوا</h3><p>فعال‌سازی <bdi class="lat">CDN</bdi> برای هدایت ترافیک وب، پورت‌های امن و وب‌میل دامنه <bdi class="lat">inja.at.</bdi></p></div></div><div class="card fragment fade-up"><span class="num">3</span><div><h3>تفکیک رکوردهای <bdi class="lat">DNS</bdi></h3><p>مسیریابی رکوردهای وب روی <bdi class="lat">CDN</bdi> و ارجاع رکوردهای اصلی ایمیل به سرور ابری.</p></div></div></div><p class="callout fragment fade-up">زیرساخت ابری طوری چیده شده که پروتکل‌های نامرتبط با وب وارد شبکه <bdi class="lat">CDN</bdi> نشوند.</p><aside class="notes">در فایل‌های پروژه Terraform، دو موجودیت کلیدی برای دامنه inja.at تعریف می‌شود. موجودیت اول، یک سرور ابری در دیتاسنتر پارس‌پک است که ماشین عملیاتی ما خواهد بود؛ جایی که برنامه‌های مربوط به میل‌سرور روی آن نصب می‌شوند. موجودیت دوم، سرویس CDN پارس‌پک است. دامنه inja.at علاوه بر ارسال و دریافت ایمیل، برای دسترسی وب‌میل یا وب‌سایت خود نیاز به لایه وب دارد. شبکه توزیع محتوا دقیقاً در جلوی لایه وب دامنه می‌نشیند تا امنیت و پایداری آن را تامین کند. همچنین در تنظیمات نام‌های دامنه، رکوردهای مربوط به وب‌سایت به سمت CDN می‌روند، در حالی که رکوردهای ویژه ارسال و دریافت ایمیل باید مستقیماً با سرور ابری در ارتباط باشند. تمام این جزئیات در ماژول‌های مشخص کدهای مخزن مکتوب شده‌اند.</aside></section>
-<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">جداسازی ترافیک شبکه</div><h2>مرزبندی ترافیک وب و سرویس ایمیل دامنه</h2></header><div class="vs">
+<section class="cam-tl"><header class="hd"><div class="kicker">جداسازی ترافیک شبکه</div><h2>مرزبندی ترافیک وب و سرویس ایمیل دامنه</h2></header><div class="vs">
 <div class="box bad fragment fade-up"><h3>ترافیک وب (<bdi class="lat">CDN</bdi>)</h3><p>هدایت درخواست‌های HTTP و وب‌میل؛ محافظت از لایه برنامه وب در برابر حملات متداول.</p></div>
 <div class="arrow fragment fade-in">←</div>
 <div class="box good fragment fade-up"><h3>ترافیک <bdi class="lat">SMTP</bdi> (مستقیم)</h3><p>ارتباط مستقیم میل‌سرور با دنیای اینترنت روی سرور ابری بدون عبور از لایه <bdi class="lat">CDN.</bdi></p></div>
 </div><p class="callout hl fragment fade-up">سرویس <bdi class="lat">CDN</bdi> به هیچ عنوان پروتکل‌های تبادل ایمیل مانند <bdi class="lat">SMTP</bdi> را پروکسی نمی‌کند.</p><aside class="notes">این اسلاید یکی از مهم‌ترین نکات فنی جلسه امروز ماست. بارها دیده‌ایم که افراد تصور می‌کنند تمام ترافیک دامنه از جمله پروتکل‌های پستی باید از پشت CDN عبور کند. این تصور کاملاً نادرست است. شبکه CDN پارس‌پک ترافیک وب یعنی درخواست‌های HTTP و سامانه‌های وب‌میل را مدیریت می‌کند و از آن‌ها محافظت می‌نماید. پروتکل SMTP که وظیفه تحویل و دریافت ایمیل‌ها را بر عهده دارد، هرگز از داخل CDN پروکسی نمی‌شود و نباید هم بشود. سرورهای ایمیل در سراسر دنیا باید مستقیماً به سرور ابری پارس‌پک که برای دامنه inja.at راه‌اندازی کرده‌ایم متصل شوند. بنابراین در رکوردهای DNS دامنه، رکورد MX به آدرس مستقیم سرور ابری اشاره دارد و CDN صرفاً محافظ بخش وب است. شفاف بودن این مرز، جلوی خطاهای پیکربندی شبکه را به طور کامل می‌گیرد.</aside></section>
-<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">چرخه اجرای <bdi class="lat">Terraform</bdi></div><h2>گام‌های امن در پیشبرد زیرساخت</h2><p class="lead small">ایجنت زیرساخت را ارزیابی می‌کند اما تصمیم نهایی را انسان می‌گیرد.</p></header>
+<section class="cam-tl"><header class="hd"><div class="kicker">چرخه اجرای <bdi class="lat">Terraform</bdi></div><h2>گام‌های امن در پیشبرد زیرساخت</h2><p class="lead small">ایجنت زیرساخت را ارزیابی می‌کند اما تصمیم نهایی را انسان می‌گیرد.</p></header>
 <div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>تولید برنامه اجرایی</h4><p>ایجنت دستور <bdi class="lat">terraform</bdi> <bdi class="c">plan</bdi> را اجرا کرده و خروجی تغییرات را تحلیل می‌کند.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>بررسی و تایید متخصص</h4><p>مهندس مسئول تغییرات پیشنهادی در منابع سرور ابری و <bdi class="lat">CDN</bdi> را بررسی می‌کند.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>اعمال قطعی تغییرات</h4><p>دستور <bdi class="c">apply</bdi> تنها پس از تایید صریح انسان به جریان می‌افتد.</p></div></div></div><p class="callout fragment fade-up">دستور <bdi class="c">destroy</bdi> در سطح هارنس مسدود شده و هرگز توسط ایجنت اجرا نمی‌شود.</p><aside class="notes">بیایید ببینیم ایجنت چطور Terraform را پیش می‌برد. در ابتدا، ایجنت فقط مجاز به اجرای دستور plan است. با این دستور، خروجی تغییرات خوانده می‌شود: آیا سرور ابری جدید به درستی تعریف شده؟ آیا تنظیمات CDN برای دامنه inja.at مطابق مستندات است؟ این خروجی به شکل شفاف به مهندس زیرساخت ارائه می‌شود. هیچ تغییری تا زمانی که شخص متخصص دکمه تایید را نزند، روی زیرساخت اعمال نمی‌شود. تایید انسانی مرحله‌ای نیست که بشود از آن چشم‌پوشی کرد. در کنار این، هارنس حفاظتی دور ایجنت تعریف شده که حتی اگر مدل تصمیم اشتباهی بگیرد و بخواهد دستور نابودی زیرساخت یعنی destroy را صادر کند، این دستور در دم ریجکت شده و اجرا نمی‌گردد. پس ما سرعت طراحی را با اطمینان مهندسی تلفیق کرده‌ایم.</aside></section>
-<section data-live="1" class="divider cam-tl" data-background-color="#19191a">
+<section class="divider cam-tl" data-background-color="#19191a">
 <h2>فاز دوم: پیکربندی ماشین با <bdi class="lat">Ansible</bdi></h2><p>استقرار پشته نرم‌افزاری میل‌سرور روی سرور ابری آماده‌شده</p><aside class="notes">پس از اینکه سرور ابری پارس‌پک با موفقیت توسط Terraform ایجاد شد و شبکه CDN در جای درست خود نشست، نوبت به سیستم‌عامل و سرویس‌های داخلی ماشین می‌رسد. حالا باید به سراغ Ansible برویم. سرور ابری ما در حال حاضر یک ماشین خام است. باید سرویس‌های مربوط به ارسال و دریافت ایمیل، احراز هویت، و نگه‌داری صندوق‌های پستی روی آن پیاده‌سازی شوند. این مرحله بسیار حساس است، زیرا کوچک‌ترین اشتباه در تنظیمات سرویس‌های پستی می‌تواند منجر به باز ماندن رله و سوءاستفاده‌های هرزنامه‌ای شود. در ادامه می‌بینیم که چطور این مرحله را با انضباط حداکثری و اتکا به پلی‌بوک استاندارد جلو می‌بریم.</aside></section>
-<section data-live="1" class="cam-tl"><header class="hd"><div class="kicker">پیکربندی نرم‌افزاری</div><h2>وظایف <bdi class="lat">Ansible</bdi> بر روی سرور ابری</h2><p class="lead small">پیکربندی ساختارمند پشته ایمیل با استفاده از پلی‌بوک مشخص و مدون موجود در مخزن.</p></header>
+<section class="cam-tl"><header class="hd"><div class="kicker">پیکربندی نرم‌افزاری</div><h2>وظایف <bdi class="lat">Ansible</bdi> بر روی سرور ابری</h2><p class="lead small">پیکربندی ساختارمند پشته ایمیل با استفاده از پلی‌بوک مشخص و مدون موجود در مخزن.</p></header>
 <ul class="list"><li class="fragment fade-up">نصب و راه‌اندازی پشته ایمیل و سرویس‌های مرتبط با استاندارد <bdi class="lat">SMTP</bdi></li><li class="fragment fade-up">تنظیم دقیق شناسه‌های دامنه <bdi class="lat">inja.at</bdi> بر روی سرویس‌های ارسال و دریافت</li><li class="fragment fade-up">ایجاد حساب‌های کاربری داخلی و تنظیمات مربوط به تحویل نامه‌ها</li><li class="fragment fade-up">اجرای انحصاری پلی‌بوک مشخص بدون اجرای دستورات خط فرمانی دلبخواه</li></ul><p class="callout hl fragment fade-up">ایجنت اجازه تولید یا اجرای شل‌اسکریپت بدون ساختار بر روی سرور را ندارد.</p><aside class="notes">وقتی سرور ابری در دسترس قرار گرفت، کلاینت ابزار Ansible را فراخوانی می‌کند. هدف در اینجا کاملاً مشخص است: نصب پشته کامل میل‌سرور، پیکربندی سرویس SMTP، تنظیم نام دامنه inja.at و تعریف ساختار تحویل نامه‌ها. نکته حیاتی این است که ایجنت حق ندارد یک سری دستورات خط فرمانی شل تصادفی یا نامطمئن تولید کرده و روی سرور اجرا کند. ما در مخزن گیت خود از پیش یک پلی‌بوک منظم، استاندارد و تست‌شده برای استقرار این پشته داریم. ایجنت وظیفه دارد متغیرهای مربوط به سرور جدید را در اینترنتی که ساخته شده تنظیم کند و پلی‌بوک رسمی را فرا بخواند. این رویکرد، پایداری محیط را حفظ کرده و اجازه نمی‌دهد سیستم به وضعیت‌های تعریف‌نشده و غیرقابل‌پیش‌بینی وارد شود.</aside></section>
-<section data-live="1" class="cam-bl"><header class="hd"><div class="kicker">اعتبارسنجی عملیاتی</div><h2>فرآیند اجرای پلی‌بوک میل‌سرور</h2><p class="lead small">پیکربندی ماشین در دو فاز آزمایشی و قطعی تحت نظارت انسان انجام می‌گیرد.</p></header>
+<section class="cam-bl"><header class="hd"><div class="kicker">اعتبارسنجی عملیاتی</div><h2>فرآیند اجرای پلی‌بوک میل‌سرور</h2><p class="lead small">پیکربندی ماشین در دو فاز آزمایشی و قطعی تحت نظارت انسان انجام می‌گیرد.</p></header>
 <div class="psteps"><div class="pstep fragment fade-up"><span class="sn2">1</span><div><h4>اجرای حالت سنجش</h4><p>اجرای <bdi class="lat">Ansible</bdi> در وضعیت <bdi class="c">check</bdi> <bdi class="lat">mode</bdi> بدون ایجاد هیچ‌گونه تغییر واقعی در سرور.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">2</span><div><h4>ارزیابی خروجی تفاوت‌ها</h4><p>مشاهده تغییرات احتمالی پکیج‌ها و فایل‌های پیکربندی توسط مهندس مسئول.</p></div></div><div class="pstep fragment fade-up"><span class="sn2">3</span><div><h4>اعمال رسمی پیکربندی</h4><p>اجرای واقعی پلی‌بوک پس از اخذ تاییدیه انسانی و بررسی مجدد صحت اتصالات.</p></div></div></div><p class="callout fragment fade-up">وضعیت <bdi class="c">check</bdi> <bdi class="lat">mode</bdi> ریسک دستکاری ناخواسته در تنظیمات شبکه سرور را به صفر می‌رساند.</p><aside class="notes">برای اجرای Ansible هم دقیقاً همان فلسفهٔ دومرحله‌ای را دنبال می‌کنیم. ابتدا ایجنت دستور را با فلگ وضعیت آزمایشی یا همان check mode اجرا می‌کند. در این حالت، Ansible سرور ابری را بررسی می‌کند و گزارش می‌دهد که چه بسته‌هایی نصب خواهند شد، چه فایل‌هایی دستخوش تغییر می‌شوند و کدام سرویس‌ها بازنشانی خواهند گشت، بدون اینکه در عمل تغییری روی سرور رخ دهد. ما این گزارش را دقیق می‌خوانیم. آیا تنظیمات دامنه inja.at درست است؟ آیا پورت‌های غیراستاندارد باز نشده‌اند؟ وقتی مهندس این خروجی را بررسی و تایید کرد، اجرای نهایی پلی‌بوک با تایید مستقیم انسان صورت می‌پذیرد. این روش مانع از بروز هرگونه ناهماهنگی در وضعیت سرور عملیاتی ما می‌شود و شفافیت کامل به همراه دارد.</aside></section>
-<section data-live="1" class="cam-bl"><header class="hd"><div class="kicker">حصار امنیتی</div><h2>آنچه هارنس به طور خودکار مسدود می‌کند</h2></header>
+<section class="cam-bl"><header class="hd"><div class="kicker">حصار امنیتی</div><h2>آنچه هارنس به طور خودکار مسدود می‌کند</h2></header>
 <div class="cards"><div class="card fragment fade-up"><span class="num">1</span><div><h3>ممنوعیت اجرای <bdi class="c">destroy</bdi></h3><p>حذف کامل قابلیت صدور دستورات تخریب زیرساخت در لایه ابزارها.</p></div></div><div class="card fragment fade-up"><span class="num">2</span><div><h3>حفاظت از کلیدها و <bdi class="lat">state</bdi></h3><p>جلوگیری از وارد شدن توکن پنل و فایل وضعیت <bdi class="lat">Terraform</bdi> در متن پرامپت‌ها.</p></div></div><div class="card fragment fade-up"><span class="num">3</span><div><h3>کنترل درگاه‌های شبکه</h3><p>رد درخواست باز کردن پورت‌ها فراتر از استانداردهای تحویل و دریافت پستی.</p></div></div></div><p class="callout fragment fade-up">مرزهای غیرقابل عبور باعث می‌شوند ایجنت فقط در محدوده امن تعریف‌شده کار کند.</p><aside class="notes">بیایید درباره هارنس یا همان حفاظ امنیتی صحبت کنیم که دور این ایجنت کشیده‌ایم. هارنس یک نرم‌افزار عجیب‌وغریب نیست؛ بلکه مجموعه‌ای از قوانین سفت‌وسخت در اجرای ابزارهاست. اولاً، کلمات کلیدی مخرب مثل destroy برای Terraform کلاً مسدود شده‌اند و سیستم دسترسی اجرای آن‌ها را ندارد. ثانیاً، داده‌های محرمانه مانند فایل‌های محلی وضعیت زیرساخت، توکن‌های پنل پارس‌پک و کلیدهای اصلی هرگز اجازه ورود به محتوای پرامپت ارسالی به مدل را ندارند و توسط فیلترها حذف می‌شوند. ثالثاً، اگر ایجنت به هر دلیلی تلاش کند فایروال را طوری تغییر دهد که پورت‌هایی فراتر از استانداردهای رایج ایمیل باز شوند، هارنس مداخله کرده و مانع اعمال کانفیگ می‌گردد. همچنین چاپ کردن مقادیر رمزها در خروجی کنسول به طور مطلق مسدود است. این یعنی یک محیط ایزوله و حرفه‌ای.</aside></section>
-<section class="divider closing cam-bl" data-background-color="#19191a">
-<h2 class="cl">مسیر پیاده‌سازی برای هفته آینده</h2><div class="pillars"><div class="pillar d fragment zoom-in"><span>1</span>دریافت کلید از <bdi class="lat">AI</bdi> <bdi class="lat">Studio</bdi> و استقرار آن درون روتر محلی روی پورت ۲۰۱۲۸</div><div class="pillar d fragment zoom-in"><span>2</span>طراحی کد <bdi class="lat">Terraform</bdi> برای سرور ابری و <bdi class="lat">CDN</bdi> با چرخه تایید انسانی</div><div class="pillar d fragment zoom-in"><span>3</span>اجرای پلی‌بوک <bdi class="lat">Ansible</bdi> در حالت سنجش و سپس استقرار کامل میل‌سرور</div></div>
-<p class="fragment fade-up">اتوماسیون زیرساخت با هوش مصنوعی یک دستیار سریع است، نه یک مدیر خودمختار بدون نظارت.</p>
-<h3 class="thanks">سپاس از همراهی شما | علیرضا صدرایی راد | پارس‌پک</h3><aside class="notes">به پایان این وبینار دو ساعته رسیدیم. اگر بخواهید هفته آینده همین سناریو را برای دامنه محصول خودتان پیاده کنید، سه گام اساسی پیش روی شماست. گام اول: کلید خود را در AI Studio پارس‌پک بسازید، آن را درون روتر محلی مثل 9router یا OmniRoute قرار دهید و ابزار ادیتور خود را به نقطه محلی متصل کنید. گام دوم: کدهای Terraform را برای سرور ابری و CDN بنویسید؛ اجرای plan را به ایجنت بسپارید اما دکمه تایید نهایی را خودتان بزنید. گام سوم: با اجرای پلی‌بوک Ansible ابتدا در حالت check mode و سپس اجرای واقعی، پشته ایمیل خود را بدون ریسک راه‌اندازی کنید. به یاد داشته باشیم که ارزش هوش مصنوعی در شتاب بخشیدن به توانایی‌های مهندسی ماست، مشروط بر اینکه حصار امنیتی دور آن هرگز نادیده گرفته نشود. از همراهی ارزشمند پارس‌پک و تک‌تک شما سپاسگزارم.</aside></section>
 <section class="divider join cam-bl" data-background-color="#19191a">
 <h2>گروه رویداد ابرها</h2>
 <p>لینک‌ها و بقیهٔ مطالب جلسه اینجاست</p>
@@ -411,75 +398,6 @@ Reveal.initialize({
     else if(k==='+'||k==='='){resize(0.12);e.stopImmediatePropagation()}
     else if(k==='-'||k==='_'){resize(-0.12);e.stopImmediatePropagation()}},true);
   function init(){Reveal.on('slidechanged',onSlide);Reveal.on('resize',function(){override=null;place()});addEventListener('resize',function(){setTimeout(place,50)});onSlide();if(wanted)start()}
-  if(window.Reveal&&Reveal.isReady&&Reveal.isReady())init();else if(window.Reveal)Reveal.on('ready',init);
-})();
-</script>
-<script>
-/* Window share. The picker opens with the deck, same moment as the camera.
-   The picture stays captured, and is shown only on slides marked data-live
-   (the router, Terraform, and Ansible part). G (or گ) picks again.
-   Drag moves it. Wheel over it resizes it. Hidden in speaker view and print. */
-(function(){
-  var qs=new URLSearchParams(location.search);
-  var embedded=false; try{embedded=window.self!==window.top}catch(e){embedded=true}
-  if(embedded||qs.has('receiver')||qs.has('print-pdf')||qs.has('noshare')||!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia))return;
-  var KEY='talk-share1', st={}; try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
-  var factor=st.factor||1, stream=null, asked=false;
-  var el=document.createElement('div'); el.id='share'; el.setAttribute('aria-label','shared window');
-  var v=document.createElement('video'); v.muted=true; v.autoplay=true; v.setAttribute('playsinline',''); el.appendChild(v);
-  var btn=document.createElement('button'); btn.id='share-btn'; btn.type='button'; btn.textContent='Share window'; btn.hidden=true;
-  document.body.appendChild(el); document.body.appendChild(btn);
-  function save(){st.factor=factor; try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
-  function onLiveSlide(){
-    var h=(window.Reveal&&Reveal.getIndices)?Reveal.getIndices().h:0;
-    var sec=document.querySelectorAll('.reveal .slides > section')[h];
-    return !!(sec&&sec.hasAttribute('data-live'));
-  }
-  function paint(){
-    el.classList.toggle('live', !!(stream&&onLiveSlide()));
-    if(stream)place();
-  }
-  function place(){
-    var sc=(window.Reveal&&Reveal.getScale)?Reveal.getScale():1;
-    var w=Math.round(720*sc*factor), h=Math.round(460*sc*factor);
-    var s=document.querySelector('.reveal .slides'); var r=s.getBoundingClientRect();
-    var x=r.left+(r.width-w)/2, y=r.top+(r.height-h)/2;
-    if(st.x!=null){x=st.x; y=st.y}
-    x=Math.max(0,Math.min(innerWidth-w,x)); y=Math.max(0,Math.min(innerHeight-h,y));
-    el.style.width=w+'px'; el.style.height=h+'px'; el.style.left=x+'px'; el.style.top=y+'px';
-  }
-  function stop(){
-    if(stream)stream.getTracks().forEach(function(t){t.stop()});
-    stream=null; v.srcObject=null; el.classList.remove('live'); btn.hidden=false;
-  }
-  function start(){
-    if(stream||asked)return;
-    asked=true;
-    var opts={video:{displaySurface:'window',width:{ideal:1600},height:{ideal:1000}},audio:false};
-    navigator.mediaDevices.getDisplayMedia(opts).then(function(s){
-      stream=s; v.srcObject=s; var p=v.play(); if(p&&p.catch)p.catch(function(){});
-      btn.hidden=true; paint();
-      var track=s.getVideoTracks()[0];
-      if(track)track.addEventListener('ended',function(){asked=false; stop()});
-    }).catch(function(){asked=false; btn.hidden=false});
-  }
-  btn.addEventListener('click',function(e){e.stopPropagation(); start()});
-  var drag=null;
-  el.addEventListener('pointerdown',function(e){var r=el.getBoundingClientRect();drag={dx:e.clientX-r.left,dy:e.clientY-r.top};el.setPointerCapture(e.pointerId);el.classList.add('drag');e.preventDefault();e.stopPropagation()});
-  el.addEventListener('pointermove',function(e){if(!drag)return;st.x=e.clientX-drag.dx;st.y=e.clientY-drag.dy;place()});
-  el.addEventListener('pointerup',function(){drag=null;el.classList.remove('drag');save()});
-  el.addEventListener('wheel',function(e){e.preventDefault();e.stopPropagation();factor=Math.max(0.45,Math.min(2.2,+(factor+(e.deltaY<0?0.08:-0.08)).toFixed(2)));save();place()},{passive:false});
-  document.addEventListener('keydown',function(e){
-    if(e.ctrlKey||e.metaKey||e.altKey)return;
-    var k=e.key;
-    if(k==='g'||k==='G'||k==='گ'){e.preventDefault();e.stopImmediatePropagation(); if(stream){asked=false; stop()} else start()}
-  },true);
-  function init(){
-    Reveal.on('slidechanged',paint);
-    Reveal.on('resize',place);
-    addEventListener('resize',function(){setTimeout(place,50)});
-    start();
-  }
   if(window.Reveal&&Reveal.isReady&&Reveal.isReady())init();else if(window.Reveal)Reveal.on('ready',init);
 })();
 </script>
